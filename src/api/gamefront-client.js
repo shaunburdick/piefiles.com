@@ -202,7 +202,7 @@ class GameFrontClient {
     try {
       await this.getGames({ perPage: 1 })
       return true
-    } catch (error) {
+    } catch {
       return false
     }
   }

@@ -14,11 +14,19 @@
     "lit": "^3.3.1"
   },
   "devDependencies": {
-    "vite": "^8.0.1",
+    "@eslint/js": "^9.39.4",
     "eslint": "^9.0.0",
-    "prettier": "^3.0.0"
+    "globals": "^17.4.0",
+    "prettier": "^3.0.0",
+    "terser": "^5.46.1",
+    "vite": "^8.0.1"
   },
-  "keywords": ["gamefront", "parody", "retro", "piefiles"],
+  "keywords": [
+    "gamefront",
+    "parody",
+    "retro",
+    "piefiles"
+  ],
   "author": "",
   "license": "MIT"
 }

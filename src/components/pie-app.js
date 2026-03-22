@@ -5,6 +5,9 @@ import './pie-header.js'
 import './pie-footer.js'
 import './pie-api-key-modal.js'
 import './pie-spinner.js'
+import './pie-games-list.js'
+import './pie-game-detail.js'
+import './pie-mod-detail.js'
 
 export class PieApp extends LitElement {
   static styles = css`
@@ -69,11 +72,13 @@ export class PieApp extends LitElement {
   showGame(slug) {
     this.currentView = 'game'
     this.gameSlug = slug
+    this.requestUpdate()
   }
 
   showMod(id) {
     this.currentView = 'mod'
     this.modId = id
+    this.requestUpdate()
   }
 
   showAbout() {
@@ -124,6 +129,20 @@ export class PieApp extends LitElement {
     router.navigate(`/?search=${encodeURIComponent(query)}`)
   }
 
+  handleGameSelected(e) {
+    const { slug } = e.detail
+    router.navigate(`/games/${slug}`)
+  }
+
+  handleModSelected(e) {
+    const { modId } = e.detail
+    router.navigate(`/mods/${modId}`)
+  }
+
+  handleNavigateBack() {
+    window.history.back()
+  }
+
   renderView() {
     if (this.showApiKeyModal) {
       return html``
@@ -134,13 +153,29 @@ export class PieApp extends LitElement {
         return html`<pie-spinner message="Loading Pie Files..."></pie-spinner>`
       
       case 'home':
-        return html`<div>Games list will go here</div>`
+        return html`
+          <pie-games-list
+            @game-selected=${this.handleGameSelected}
+          ></pie-games-list>
+        `
       
       case 'game':
-        return html`<div>Game detail for ${this.gameSlug}</div>`
+        return html`
+          <pie-game-detail
+            .slug=${this.gameSlug}
+            @mod-selected=${this.handleModSelected}
+            @navigate-back=${this.handleNavigateBack}
+          ></pie-game-detail>
+        `
       
       case 'mod':
-        return html`<div>Mod detail for ${this.modId}</div>`
+        return html`
+          <pie-mod-detail
+            .modId=${this.modId}
+            @navigate-back=${this.handleNavigateBack}
+            @game-selected=${this.handleGameSelected}
+          ></pie-mod-detail>
+        `
       
       case 'about':
         return html`
