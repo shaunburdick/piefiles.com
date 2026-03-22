@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit'
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'
 import { apiClient } from '../api/gamefront-client.js'
 import { replaceTextInElement } from '../utils/text-replacer.js'
+import { sanitizeHTML } from '../utils/sanitize.js'
 import './pie-spinner.js'
 
 export class PieGameDetail extends LitElement {
@@ -331,7 +332,11 @@ export class PieGameDetail extends LitElement {
                     <div class="mod-card" @click=${() => this.handleModClick(mod)}>
                       <h3>${mod.title}</h3>
                       ${mod.description
-                        ? html` <div class="description">${unsafeHTML(mod.description)}</div> `
+                        ? html`
+                            <div class="description">
+                              ${unsafeHTML(sanitizeHTML(mod.description))}
+                            </div>
+                          `
                         : ''}
                       <div class="meta">
                         ${mod.downloads || 0} downloads

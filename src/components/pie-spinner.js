@@ -5,36 +5,38 @@ export class PieSpinner extends LitElement {
     :host {
       display: inline-block;
     }
-    
+
     .spinner {
       display: inline-block;
       width: 40px;
       height: 40px;
-      border: 4px solid var(--color-content-bg, #D0AA68);
-      border-top-color: var(--color-accent-brown, #C89D5F);
+      border: 4px solid var(--color-content-bg, #d0aa68);
+      border-top-color: var(--color-accent-brown, #c89d5f);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-    
+
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
-    
+
     .container {
       text-align: center;
       padding: 40px;
     }
-    
+
     .message {
       margin-top: 16px;
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-family: Arial, sans-serif;
       font-size: 14px;
     }
   `
 
   static properties = {
-    message: { type: String }
+    message: { type: String },
   }
 
   constructor() {

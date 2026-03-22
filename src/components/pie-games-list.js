@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit'
 import { apiClient } from '../api/gamefront-client.js'
 import { replaceTextInElement } from '../utils/text-replacer.js'
+import { getSafeImageURL } from '../utils/image-validator.js'
 import './pie-spinner.js'
 
 export class PieGamesList extends LitElement {
@@ -327,7 +328,7 @@ export class PieGamesList extends LitElement {
   getFirstImage(game) {
     // Use box_art if available
     if (game.box_art) {
-      return game.box_art
+      return getSafeImageURL(game.box_art)
     }
     return null
   }

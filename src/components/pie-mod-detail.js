@@ -2,6 +2,8 @@ import { LitElement, html, css } from 'lit'
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'
 import { apiClient } from '../api/gamefront-client.js'
 import { replaceTextInElement } from '../utils/text-replacer.js'
+import { sanitizeHTML } from '../utils/sanitize.js'
+import { getSafeImageURL } from '../utils/image-validator.js'
 import './pie-spinner.js'
 
 export class PieModDetail extends LitElement {
@@ -301,7 +303,7 @@ export class PieModDetail extends LitElement {
         ? html`
             <div class="description-section">
               <h2>Description</h2>
-              <div>${unsafeHTML(this.mod.description)}</div>
+              <div>${unsafeHTML(sanitizeHTML(this.mod.description))}</div>
             </div>
           `
         : ''}
@@ -313,7 +315,7 @@ export class PieModDetail extends LitElement {
                 ${this.mod.images.map(
                   (image) => html`
                     <div class="screenshot">
-                      <img src=${image.path} alt="Screenshot" loading="lazy" />
+                      <img src=${getSafeImageURL(image.path)} alt="Screenshot" loading="lazy" />
                     </div>
                   `
                 )}

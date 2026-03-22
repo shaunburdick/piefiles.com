@@ -7,26 +7,26 @@ export class PieFooter extends LitElement {
       display: block;
       margin-top: auto;
     }
-    
+
     .footer {
-      background-color: var(--color-accent-brown, #C89D5F);
+      background-color: var(--color-accent-brown, #c89d5f);
       border-top: 1px solid var(--color-border, #000000);
       padding: 24px 16px;
       text-align: center;
-      color: var(--color-white, #FFFFFF);
+      color: var(--color-white, #ffffff);
       font-size: 11px;
     }
-    
+
     .footer-content {
       max-width: 1200px;
       margin: 0 auto;
     }
-    
+
     .disclaimer {
       margin-bottom: 12px;
       line-height: 1.6;
     }
-    
+
     .links {
       display: flex;
       flex-wrap: wrap;
@@ -34,10 +34,10 @@ export class PieFooter extends LitElement {
       gap: 16px;
       margin-top: 12px;
     }
-    
+
     .links a,
     .links button {
-      color: var(--color-white, #FFFFFF);
+      color: var(--color-white, #ffffff);
       text-decoration: underline;
       background: none;
       border: none;
@@ -46,12 +46,12 @@ export class PieFooter extends LitElement {
       padding: 0;
       font-family: Arial, sans-serif;
     }
-    
+
     .links a:hover,
     .links button:hover {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
     }
-    
+
     .credits {
       margin-top: 16px;
       font-size: 10px;
@@ -61,10 +61,12 @@ export class PieFooter extends LitElement {
 
   handleClearApiKey() {
     if (confirm('Are you sure you want to clear your API key? You will need to enter it again.')) {
-      this.dispatchEvent(new CustomEvent('clear-api-key', {
-        bubbles: true,
-        composed: true
-      }))
+      this.dispatchEvent(
+        new CustomEvent('clear-api-key', {
+          bubbles: true,
+          composed: true,
+        })
+      )
     }
   }
 
@@ -72,31 +74,32 @@ export class PieFooter extends LitElement {
     return html`
       <footer class="footer">
         <div class="footer-content">
-          <div class="disclaimer">
-            ${DISCLAIMER}
-          </div>
-          
+          <div class="disclaimer">${DISCLAIMER}</div>
+
           <div class="links">
             <a href=${GAMEFRONT_URL} target="_blank" rel="noopener noreferrer">
               Visit GameFront.com
             </a>
             <span>•</span>
-            <button @click=${this.handleClearApiKey}>
-              Clear API Key
-            </button>
+            <button @click=${this.handleClearApiKey}>Clear API Key</button>
             <span>•</span>
-            <a href="/about" @click=${(e) => {
-              e.preventDefault()
-              this.dispatchEvent(new CustomEvent('navigate', {
-                detail: { path: '/about' },
-                bubbles: true,
-                composed: true
-              }))
-            }}>
+            <a
+              href="/about"
+              @click=${(e) => {
+                e.preventDefault()
+                this.dispatchEvent(
+                  new CustomEvent('navigate', {
+                    detail: { path: '/about' },
+                    bubbles: true,
+                    composed: true,
+                  })
+                )
+              }}
+            >
               About
             </a>
           </div>
-          
+
           <div class="credits">
             Made with 🥧 and humor • Original PieFiles.com (2005) • GameFront (1998-present)
           </div>
