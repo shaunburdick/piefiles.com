@@ -166,19 +166,12 @@ class GameFrontClient {
   }
 
   /**
-   * Fetch single game by slug with its files
+   * Fetch single game by slug
    * @param {string} slug - Game slug
-   * @param {Object} options - Query options
-   * @param {number} options.page - Page number for files
-   * @param {number} options.perPage - Items per page for files
-   * @returns {Promise<Object>} Game data with files
+   * @returns {Promise<Object>} Game data
    */
-  async getGame(slug, { page = 1, perPage = 20 } = {}) {
-    const data = await this.request(GAME_QUERY, {
-      slug,
-      first: perPage,
-      page,
-    })
+  async getGame(slug) {
+    const data = await this.request(GAME_QUERY, { slug })
     if (!data.game) {
       throw new Error('NOT_FOUND')
     }
@@ -195,11 +188,11 @@ class GameFrontClient {
    */
   async getMods(gameSlug, { page = 1, perPage = 20 } = {}) {
     const data = await this.request(MODS_QUERY, {
-      gameSlug,
+      slug: gameSlug,
       first: perPage,
       page,
     })
-    return data.mods
+    return data.modsForGame
   }
 
   /**

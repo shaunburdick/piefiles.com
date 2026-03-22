@@ -28,7 +28,7 @@ export const GAMES_QUERY = `
 `
 
 export const GAME_QUERY = `
-  query Game($slug: String!, $first: Int, $page: Int) {
+  query Game($slug: String!) {
     game(slug: $slug) {
       id
       title
@@ -41,46 +41,24 @@ export const GAME_QUERY = `
         name
         slug
       }
-      files(first: $first, page: $page) {
-        data {
-          id
-          title
-          slug
-          description
-          file_size
-          download_count
-          created_at
-          updated_at
-          author {
-            id
-            name
-          }
-        }
-        paginatorInfo {
-          currentPage
-          lastPage
-          hasMorePages
-        }
-      }
     }
   }
 `
 
 export const MODS_QUERY = `
-  query Files($gameSlug: String!, $first: Int!, $page: Int!) {
-    files(game_slug: $gameSlug, first: $first, page: $page) {
+  query ModsForGame($slug: String!, $first: Int!, $page: Int!) {
+    modsForGame(game_slug: $slug, first: $first, page: $page) {
       data {
         id
         title
         slug
         description
-        file_size
-        download_count
+        downloads
         created_at
         updated_at
         author {
-          id
-          name
+          display_name
+          slug
         }
       }
       paginatorInfo {
@@ -93,30 +71,30 @@ export const MODS_QUERY = `
 `
 
 export const MOD_QUERY = `
-  query File($id: ID!) {
-    file(id: $id) {
+  query Mod($slug: String!, $gameSlug: String!) {
+    mod(slug: $slug, game_slug: $gameSlug) {
       id
       title
       slug
+      url
       description
-      file_size
-      download_count
-      download_url
+      excerpt
+      downloads
       created_at
       updated_at
       author {
-        id
-        name
+        display_name
+        slug
       }
       game {
         id
         title
         slug
       }
-      screenshots {
+      images {
         id
-        url
-        thumbnail_url
+        path
+        size
       }
     }
   }

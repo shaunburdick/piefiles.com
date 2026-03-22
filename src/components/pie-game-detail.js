@@ -195,21 +195,19 @@ export class PieGameDetail extends LitElement {
     this.error = ''
 
     try {
-      // Load game details with files
-      this.game = await apiClient.getGame(this.slug, {
+      // Load game details
+      this.game = await apiClient.getGame(this.slug)
+
+      // Load mods for this game
+      const result = await apiClient.getMods(this.slug, {
         page: this.currentPage,
         perPage: 20,
       })
 
-      // Extract mods from game.files
-      if (this.game.files) {
-        this.mods = this.game.files.data || []
-        this.currentPage = this.game.files.paginatorInfo?.currentPage || 1
-        this.totalPages = this.game.files.paginatorInfo?.lastPage || 1
-        this.hasMore = this.game.files.paginatorInfo?.hasMorePages || false
-      } else {
-        this.mods = []
-      }
+      this.mods = result.data
+      this.currentPage = result.paginatorInfo.currentPage
+      this.totalPages = result.paginatorInfo.lastPage
+      this.hasMore = result.paginatorInfo.hasMorePages
     } catch (err) {
       console.error('Failed to load game:', err)
       this.error = apiClient.getErrorMessage(err)
