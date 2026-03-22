@@ -28,7 +28,7 @@ export const GAMES_QUERY = `
 `
 
 export const GAME_QUERY = `
-  query Game($slug: String!) {
+  query Game($slug: String!, $first: Int, $page: Int) {
     game(slug: $slug) {
       id
       title
@@ -40,6 +40,27 @@ export const GAME_QUERY = `
         id
         name
         slug
+      }
+      files(first: $first, page: $page) {
+        data {
+          id
+          title
+          slug
+          description
+          file_size
+          download_count
+          created_at
+          updated_at
+          author {
+            id
+            name
+          }
+        }
+        paginatorInfo {
+          currentPage
+          lastPage
+          hasMorePages
+        }
       }
     }
   }

@@ -6,9 +6,9 @@
 import { GAMES_QUERY, GAME_QUERY, MODS_QUERY, MOD_QUERY } from './queries.js'
 
 // Use proxy in development to avoid CORS issues
-const API_ENDPOINT = import.meta.env.DEV 
-  ? '/api/v1/graphql'  // Proxied through Vite dev server
-  : 'https://www.gamefront.com/api/v1/graphql'  // Direct in production
+const API_ENDPOINT = import.meta.env.DEV
+  ? '/api/v1/graphql' // Proxied through Vite dev server
+  : 'https://www.gamefront.com/api/v1/graphql' // Direct in production
 
 const USER_AGENT = 'PieFiles/1.0 (+https://piefiles.com)'
 const RATE_LIMIT_PER_MINUTE = 120
@@ -63,15 +63,15 @@ class GameFrontClient {
     const now = Date.now()
     const timeSinceLastRequest = now - this.lastRequestTime
     if (timeSinceLastRequest < REQUEST_INTERVAL) {
-      await new Promise(resolve => setTimeout(resolve, REQUEST_INTERVAL - timeSinceLastRequest))
+      await new Promise((resolve) => setTimeout(resolve, REQUEST_INTERVAL - timeSinceLastRequest))
     }
 
     const apiKey = this.getApiKey()
 
     const headers = {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'User-Agent': USER_AGENT
+      Accept: 'application/json',
+      'User-Agent': USER_AGENT,
     }
 
     // Add Authorization header only if API key is provided
@@ -81,12 +81,12 @@ class GameFrontClient {
 
     try {
       this.lastRequestTime = Date.now()
-      
+
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers,
         body: JSON.stringify({ query, variables }),
-        signal: AbortSignal.timeout(10000) // 10 second timeout
+        signal: AbortSignal.timeout(10000), // 10 second timeout
       })
 
       if (!response.ok) {
@@ -125,15 +125,15 @@ class GameFrontClient {
   getErrorMessage(error) {
     const hasApiKey = !!this.getApiKey()
     const messages = {
-      'API_KEY_REQUIRED': 'API key is required. Please configure your GameFront API key in settings.',
-      'UNAUTHORIZED': hasApiKey 
+      API_KEY_REQUIRED: 'API key is required. Please configure your GameFront API key in settings.',
+      UNAUTHORIZED: hasApiKey
         ? 'API key is invalid. Please check your GameFront API key in settings.'
         : 'GameFront API requires authentication. Please configure your API key in settings (footer).',
-      'RATE_LIMITED': 'Too many requests. Please wait a moment and try again.',
-      'SERVER_ERROR': 'GameFront is experiencing issues. Please try again later.',
-      'TIMEOUT': 'Request timed out. Please check your connection and try again.',
-      'GRAPHQL_ERROR': 'An error occurred while fetching data. Please try again.',
-      'REQUEST_FAILED': 'Failed to fetch data from GameFront. Please try again.'
+      RATE_LIMITED: 'Too many requests. Please wait a moment and try again.',
+      SERVER_ERROR: 'GameFront is experiencing issues. Please try again later.',
+      TIMEOUT: 'Request timed out. Please check your connection and try again.',
+      GRAPHQL_ERROR: 'An error occurred while fetching data. Please try again.',
+      REQUEST_FAILED: 'Failed to fetch data from GameFront. Please try again.',
     }
     return messages[error.message] || 'An unexpected error occurred. Please try again.'
   }
@@ -148,24 +148,37 @@ class GameFrontClient {
    * @param {number} options.perPage - Items per page
    * @returns {Promise<Object>} Games data with pagination info
    */
-  async getGames({ search = '', orderBy = 'FILE_COUNT', orderDirection = 'DESC', page = 1, perPage = 20 } = {}) {
+  async getGames({
+    search = '',
+    orderBy = 'FILE_COUNT',
+    orderDirection = 'DESC',
+    page = 1,
+    perPage = 20,
+  } = {}) {
     const data = await this.request(GAMES_QUERY, {
       search,
       orderBy,
       orderDirection,
       first: perPage,
-      page
+      page,
     })
     return data.games
   }
 
   /**
-   * Fetch single game by slug
+   * Fetch single game by slug with its files
    * @param {string} slug - Game slug
-   * @returns {Promise<Object>} Game data
+   * @param {Object} options - Query options
+   * @param {number} options.page - Page number for files
+   * @param {number} options.perPage - Items per page for files
+   * @returns {Promise<Object>} Game data with files
    */
-  async getGame(slug) {
-    const data = await this.request(GAME_QUERY, { slug })
+  async getGame(slug, { page = 1, perPage = 20 } = {}) {
+    const data = await this.request(GAME_QUERY, {
+      slug,
+      first: perPage,
+      page,
+    })
     if (!data.game) {
       throw new Error('NOT_FOUND')
     }
@@ -184,7 +197,7 @@ class GameFrontClient {
     const data = await this.request(MODS_QUERY, {
       gameSlug,
       first: perPage,
-      page
+      page,
     })
     return data.mods
   }
