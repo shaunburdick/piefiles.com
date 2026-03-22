@@ -10,7 +10,7 @@ export default defineConfig({
     target: 'es2020'
   },
   server: {
-    port: 5173,
+    port: 5174,
     open: true,
     proxy: {
       '/api': {
