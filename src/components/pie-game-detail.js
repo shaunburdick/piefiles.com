@@ -8,97 +8,97 @@ export class PieGameDetail extends LitElement {
     :host {
       display: block;
     }
-    
+
     .game-header {
-      background-color: var(--color-content-bg, #D0AA68);
+      background-color: var(--color-content-bg, #d0aa68);
       border: 1px solid var(--color-border, #000000);
       padding: 24px;
       margin-bottom: 24px;
     }
-    
+
     .game-header h1 {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 24px;
       margin: 0 0 12px 0;
     }
-    
+
     .game-meta {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 12px;
       margin-bottom: 12px;
     }
-    
+
     .categories {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-top: 12px;
     }
-    
+
     .category-tag {
-      background-color: var(--color-accent-brown, #C89D5F);
-      color: var(--color-white, #FFFFFF);
+      background-color: var(--color-accent-brown, #c89d5f);
+      color: var(--color-white, #ffffff);
       padding: 4px 12px;
       font-size: 11px;
       border: 1px solid var(--color-border, #000000);
     }
-    
+
     .back-button {
       padding: 8px 16px;
       font-size: 12px;
       font-family: Arial, sans-serif;
-      background-color: var(--color-accent-brown, #C89D5F);
-      color: var(--color-white, #FFFFFF);
-      border: 1px solid var(--color-white, #FFFFFF);
+      background-color: var(--color-accent-brown, #c89d5f);
+      color: var(--color-white, #ffffff);
+      border: 1px solid var(--color-white, #ffffff);
       cursor: pointer;
       margin-bottom: 24px;
       display: inline-block;
     }
-    
+
     .back-button:hover {
-      background-color: var(--color-accent-brown-alt, #AD915F);
+      background-color: var(--color-accent-brown-alt, #ad915f);
     }
-    
+
     .mods-section h2 {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 18px;
       margin-bottom: 16px;
     }
-    
+
     .mods-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 16px;
       margin-bottom: 24px;
     }
-    
+
     @media (min-width: 768px) {
       .mods-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
-    
+
     .mod-card {
-      background-color: var(--color-content-bg, #D0AA68);
+      background-color: var(--color-content-bg, #d0aa68);
       border: 1px solid var(--color-border, #000000);
       padding: 16px;
       transition: background-color 0.2s;
       cursor: pointer;
     }
-    
+
     .mod-card:hover {
-      background-color: var(--color-content-bg-alt, #B4A57E);
+      background-color: var(--color-content-bg-alt, #b4a57e);
     }
-    
+
     .mod-card h3 {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 14px;
       margin: 0 0 8px 0;
       font-weight: bold;
     }
-    
+
     .mod-card .description {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 11px;
       line-height: 1.5;
       margin-bottom: 8px;
@@ -107,15 +107,15 @@ export class PieGameDetail extends LitElement {
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    
+
     .mod-card .meta {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 10px;
       margin-top: 8px;
       padding-top: 8px;
-      border-top: 1px solid var(--color-accent-brown, #C89D5F);
+      border-top: 1px solid var(--color-accent-brown, #c89d5f);
     }
-    
+
     .pagination {
       display: flex;
       justify-content: center;
@@ -124,40 +124,40 @@ export class PieGameDetail extends LitElement {
       padding: 24px 0;
       flex-wrap: wrap;
     }
-    
+
     .pagination button {
       padding: 8px 20px;
       font-size: 12px;
       font-family: Arial, sans-serif;
-      background-color: var(--color-accent-brown, #C89D5F);
-      color: var(--color-white, #FFFFFF);
-      border: 1px solid var(--color-white, #FFFFFF);
+      background-color: var(--color-accent-brown, #c89d5f);
+      color: var(--color-white, #ffffff);
+      border: 1px solid var(--color-white, #ffffff);
       cursor: pointer;
       min-width: 80px;
     }
-    
+
     .pagination button:hover:not(:disabled) {
-      background-color: var(--color-accent-brown-alt, #AD915F);
+      background-color: var(--color-accent-brown-alt, #ad915f);
     }
-    
+
     .pagination button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
-    
+
     .error {
-      background-color: #FFE5E5;
-      color: #CC0000;
+      background-color: #ffe5e5;
+      color: #cc0000;
       padding: 16px;
-      border: 1px solid #CC0000;
+      border: 1px solid #cc0000;
       margin-bottom: 16px;
     }
-    
+
     .no-mods {
       text-align: center;
       padding: 40px;
-      color: var(--color-primary-text, #543F20);
-      background-color: var(--color-content-bg, #D0AA68);
+      color: var(--color-primary-text, #543f20);
+      background-color: var(--color-content-bg, #d0aa68);
       border: 1px solid var(--color-border, #000000);
     }
   `
@@ -170,7 +170,7 @@ export class PieGameDetail extends LitElement {
     error: { type: String },
     currentPage: { type: Number },
     totalPages: { type: Number },
-    hasMore: { type: Boolean }
+    hasMore: { type: Boolean },
   }
 
   constructor() {
@@ -195,19 +195,21 @@ export class PieGameDetail extends LitElement {
     this.error = ''
 
     try {
-      // Load game details
-      this.game = await apiClient.getGame(this.slug)
-      
-      // Load mods for this game
-      const result = await apiClient.getMods(this.slug, {
+      // Load game details with files
+      this.game = await apiClient.getGame(this.slug, {
         page: this.currentPage,
-        perPage: 20
+        perPage: 20,
       })
 
-      this.mods = result.data
-      this.currentPage = result.paginatorInfo.currentPage
-      this.totalPages = result.paginatorInfo.lastPage
-      this.hasMore = result.paginatorInfo.hasMorePages
+      // Extract mods from game.files
+      if (this.game.files) {
+        this.mods = this.game.files.data || []
+        this.currentPage = this.game.files.paginatorInfo?.currentPage || 1
+        this.totalPages = this.game.files.paginatorInfo?.lastPage || 1
+        this.hasMore = this.game.files.paginatorInfo?.hasMorePages || false
+      } else {
+        this.mods = []
+      }
     } catch (err) {
       console.error('Failed to load game:', err)
       this.error = apiClient.getErrorMessage(err)
@@ -217,18 +219,22 @@ export class PieGameDetail extends LitElement {
   }
 
   handleBackClick() {
-    this.dispatchEvent(new CustomEvent('navigate-back', {
-      bubbles: true,
-      composed: true
-    }))
+    this.dispatchEvent(
+      new CustomEvent('navigate-back', {
+        bubbles: true,
+        composed: true,
+      })
+    )
   }
 
   handleModClick(mod) {
-    this.dispatchEvent(new CustomEvent('mod-selected', {
-      detail: { id: mod.id },
-      bubbles: true,
-      composed: true
-    }))
+    this.dispatchEvent(
+      new CustomEvent('mod-selected', {
+        detail: { id: mod.id },
+        bubbles: true,
+        composed: true,
+      })
+    )
   }
 
   async handlePrevPage() {
@@ -271,8 +277,7 @@ export class PieGameDetail extends LitElement {
     if (this.error) {
       return html`
         <div class="error">
-          <strong>Error:</strong> ${this.error}
-          <br><br>
+          <strong>Error:</strong> ${this.error} <br /><br />
           <button @click=${this.loadGameAndMods}>Retry</button>
           <button @click=${this.handleBackClick}>Go Back</button>
         </div>
@@ -283,79 +288,77 @@ export class PieGameDetail extends LitElement {
       return html`
         <div class="error">
           Game not found.
-          <br><br>
+          <br /><br />
           <button @click=${this.handleBackClick}>Go Back</button>
         </div>
       `
     }
 
     return html`
-      <button class="back-button" @click=${this.handleBackClick}>
-        ← Back to Games
-      </button>
+      <button class="back-button" @click=${this.handleBackClick}>← Back to Games</button>
 
       <div class="game-header">
         <h1>${this.game.title}</h1>
-        <div class="game-meta">
-          ${this.game.file_count} files available
-        </div>
-        
-        ${this.game.categories && this.game.categories.length > 0 ? html`
-          <div class="categories">
-            ${this.game.categories.map(cat => html`
-              <span class="category-tag">${cat.name}</span>
-            `)}
-          </div>
-        ` : ''}
+        <div class="game-meta">${this.game.file_count} files available</div>
+
+        ${this.game.categories && this.game.categories.length > 0
+          ? html`
+              <div class="categories">
+                ${this.game.categories.map(
+                  (cat) => html` <span class="category-tag">${cat.name}</span> `
+                )}
+              </div>
+            `
+          : ''}
       </div>
 
       <div class="mods-section">
         <h2>Available Mods</h2>
-        
-        ${this.mods.length === 0 ? html`
-          <div class="no-mods">
-            <h3>No Pies Found</h3>
-            <p>No mods are available for this game yet.</p>
-          </div>
-        ` : html`
-          <div class="mods-grid">
-            ${this.mods.map(mod => html`
-              <div class="mod-card" @click=${() => this.handleModClick(mod)}>
-                <h3>${mod.title}</h3>
-                ${mod.description ? html`
-                  <div class="description">${mod.description}</div>
-                ` : ''}
-                <div class="meta">
-                  ${mod.file_size ? `${this.formatFileSize(mod.file_size)} • ` : ''}
-                  ${mod.download_count} downloads
-                  ${mod.created_at ? ` • ${this.formatDate(mod.created_at)}` : ''}
-                </div>
-              </div>
-            `)}
-          </div>
 
-          ${this.totalPages > 1 ? html`
-            <div class="pagination">
-              <button 
-                @click=${this.handlePrevPage} 
-                ?disabled=${this.currentPage === 1}
-              >
-                ← Previous
-              </button>
-              
-              <span style="color: var(--color-primary-text); font-size: 12px;">
-                Page ${this.currentPage} of ${this.totalPages}
-              </span>
-              
-              <button 
-                @click=${this.handleNextPage} 
-                ?disabled=${!this.hasMore}
-              >
-                Next →
-              </button>
-            </div>
-          ` : ''}
-        `}
+        ${this.mods.length === 0
+          ? html`
+              <div class="no-mods">
+                <h3>No Pies Found</h3>
+                <p>No mods are available for this game yet.</p>
+              </div>
+            `
+          : html`
+              <div class="mods-grid">
+                ${this.mods.map(
+                  (mod) => html`
+                    <div class="mod-card" @click=${() => this.handleModClick(mod)}>
+                      <h3>${mod.title}</h3>
+                      ${mod.description
+                        ? html` <div class="description">${mod.description}</div> `
+                        : ''}
+                      <div class="meta">
+                        ${mod.file_size ? `${this.formatFileSize(mod.file_size)} • ` : ''}
+                        ${mod.download_count} downloads
+                        ${mod.created_at ? ` • ${this.formatDate(mod.created_at)}` : ''}
+                      </div>
+                    </div>
+                  `
+                )}
+              </div>
+
+              ${this.totalPages > 1
+                ? html`
+                    <div class="pagination">
+                      <button @click=${this.handlePrevPage} ?disabled=${this.currentPage === 1}>
+                        ← Previous
+                      </button>
+
+                      <span style="color: var(--color-primary-text); font-size: 12px;">
+                        Page ${this.currentPage} of ${this.totalPages}
+                      </span>
+
+                      <button @click=${this.handleNextPage} ?disabled=${!this.hasMore}>
+                        Next →
+                      </button>
+                    </div>
+                  `
+                : ''}
+            `}
       </div>
     `
   }
