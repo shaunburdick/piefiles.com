@@ -5,25 +5,25 @@
 
 :root {
   /* Primary Colors */
-  --color-primary-text: #543F20;          /* Dark brown text */
-  --color-background: #A99E60;             /* Tan/beige background */
-  --color-accent-brown: #C89D5F;           /* Medium brown */
-  --color-accent-brown-alt: #AD915F;       /* Alternate brown */
-  --color-content-bg: #D0AA68;             /* Light tan content areas */
-  --color-content-bg-alt: #B4A57E;         /* Alternate content background */
-  --color-header-bg: #C89D5F;              /* Brown header bars */
-  
+  --color-primary-text: #543f20; /* Dark brown text */
+  --color-background: #a99e60; /* Tan/beige background */
+  --color-accent-brown: #c89d5f; /* Medium brown */
+  --color-accent-brown-alt: #ad915f; /* Alternate brown */
+  --color-content-bg: #d0aa68; /* Light tan content areas */
+  --color-content-bg-alt: #b4a57e; /* Alternate content background */
+  --color-header-bg: #c89d5f; /* Brown header bars */
+
   /* Text Colors */
-  --color-link: #543F20;                   /* Link color */
-  --color-link-hover: #FFFFFF;             /* Link hover color */
-  --color-white: #FFFFFF;
+  --color-link: #543f20; /* Link color */
+  --color-link-hover: #ffffff; /* Link hover color */
+  --color-white: #ffffff;
   --color-black: #000000;
-  
+
   /* UI Elements */
-  --color-border: #000000;                 /* Black borders */
-  --color-scrollbar-track: #C2B091;        /* Scrollbar track */
-  --color-scrollbar-thumb: #C89D5F;        /* Scrollbar thumb */
-  
+  --color-border: #000000; /* Black borders */
+  --color-scrollbar-track: #c2b091; /* Scrollbar track */
+  --color-scrollbar-thumb: #c89d5f; /* Scrollbar thumb */
+
   /* Typography */
   --font-family: Arial, sans-serif;
   --font-size-base: 12px;
@@ -32,18 +32,18 @@
   --font-size-h1: 24px;
   --font-size-h2: 18px;
   --font-size-h3: 14px;
-  
+
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 40px;
-  
+
   /* Layout */
   --max-width: 1200px;
   --border-width: 1px;
-  --border-radius: 0px;  /* Retro style - no rounded corners */
+  --border-radius: 0px; /* Retro style - no rounded corners */
 }
 
 /* Scrollbar styling for retro look (Chromium browsers) */

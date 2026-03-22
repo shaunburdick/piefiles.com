@@ -1,23 +1,45 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="The Ultimate Sweet Baked Pastry Download Resource! A humorous parody of GameFront.com with retro PieFiles theme.">
-  <meta name="theme-color" content="#A99E60">
-  <title>Pie Files - The Ultimate Sweet Baked Pastry Download Resource!</title>
-  <link rel="stylesheet" href="/src/styles/main.css">
-  <link rel="stylesheet" href="/src/styles/retro-theme.css">
-  <link rel="stylesheet" href="/src/styles/responsive.css">
-</head>
-<body>
-  <noscript>
-    <div style="padding: 20px; text-align: center; background: #A99E60; color: #543F20;">
-      <h1>JavaScript Required</h1>
-      <p>This site requires JavaScript to display content from GameFront. Please enable JavaScript in your browser.</p>
-    </div>
-  </noscript>
-  <div id="app"></div>
-  <script type="module" src="/src/main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="The Ultimate Sweet Baked Pastry Download Resource! A humorous parody of GameFront.com with retro PieFiles theme."
+    />
+    <meta name="theme-color" content="#A99E60" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+    default-src 'self';
+    script-src 'self';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' https://osiris.gamefront.com https://www.gamefront.com https://gamefront.com data:;
+    connect-src 'self' https://www.gamefront.com https://gamefront.com;
+    font-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+  "
+    />
+    <title>Pie Files - The Ultimate Sweet Baked Pastry Download Resource!</title>
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/retro-theme.css" />
+    <link rel="stylesheet" href="/src/styles/responsive.css" />
+  </head>
+  <body>
+    <noscript>
+      <div style="padding: 20px; text-align: center; background: #a99e60; color: #543f20">
+        <h1>JavaScript Required</h1>
+        <p>
+          This site requires JavaScript to display content from GameFront. Please enable JavaScript
+          in your browser.
+        </p>
+      </div>
+    </noscript>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>

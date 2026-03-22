@@ -65,18 +65,18 @@
     gap: var(--spacing-lg);
     padding: var(--spacing-lg);
   }
-  
+
   .header-content {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .search-bar {
     width: auto;
     min-width: 300px;
   }
-  
+
   .container {
     padding: 0 var(--spacing-lg);
   }
@@ -88,18 +88,18 @@
     grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing-xl);
   }
-  
+
   .search-bar {
     min-width: 400px;
   }
-  
+
   /* Two-column layout for game detail */
   .game-detail-layout {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: var(--spacing-xl);
   }
-  
+
   /* Mod detail layout */
   .mod-detail-layout {
     display: grid;
