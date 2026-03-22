@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit'
+import { unsafeHTML } from 'lit/directives/unsafe-html.js'
 import { apiClient } from '../api/gamefront-client.js'
 import { replaceTextInElement } from '../utils/text-replacer.js'
 import './pie-spinner.js'
@@ -305,7 +306,7 @@ export class PieModDetail extends LitElement {
         ? html`
             <div class="description-section">
               <h2>Description</h2>
-              <p>${this.mod.description}</p>
+              <div>${unsafeHTML(this.mod.description)}</div>
             </div>
           `
         : ''}
