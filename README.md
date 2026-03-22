@@ -16,11 +16,15 @@ Original PieFiles.com was an Age of Mythology files site from 2005. This project
 
 ## 🎯 Project Status
 
-**Current Phase**: Specification Complete (Phase 1-3)
+**Current Phase**: Implementation Complete - Ready for Testing! 🎉
 
 - ✅ Constitution created (.specify/memory/constitution.md)
 - ✅ Feature specification complete (.specify/features/001-gamefront-retro-theme.md)
-- ⏳ **Next**: Implementation planning phase (modern-architect-engineer agent)
+- ✅ Implementation planning complete (specs/001-gamefront-retro-theme/)
+- ✅ All components implemented (Phase 1-4)
+- ✅ CORS proxy configured for development
+- ✅ Error handling and loading states
+- ⏳ **Next**: Testing and deployment to GitHub Pages
 
 ## 📋 Specification Overview
 
@@ -67,16 +71,85 @@ This project follows **Specification-Driven Development (SDD)**:
 
 ## 🔑 API Key Required
 
-Users will need their own GameFront API key:
+**GameFront API requires authentication** - Users need a free API key:
+
 1. Create account at [GameFront.com](https://www.gamefront.com)
 2. Get API key from [Account API Keys](https://www.gamefront.com/account/api-keys)
-3. Enter key in PieFiles.com settings (stored in browser localStorage)
+3. Click "Configure API Key" button when prompted in the app
+4. Enter and test your key (stored securely in browser localStorage only)
 
-**Rate Limits**: 120 requests/min (authenticated) or 30 requests/min (unauthenticated)
+**Rate Limits**: 120 requests/minute (authenticated)
+
+**Note**: The original plan mentioned 30 req/min without authentication, but testing shows the API requires a valid Bearer token for all requests.
 
 ## 🛠️ Local Development
 
-_(Will be added in planning phase)_
+### Prerequisites
+- Node.js 18+ 
+- npm 9+
+
+### Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server (with CORS proxy)
+npm run dev
+
+# The app will open at http://localhost:5173
+```
+
+### Development Commands
+
+```bash
+npm run dev          # Start dev server with hot reload
+npm run build        # Build for production
+npm run preview      # Preview production build locally
+npm run lint         # Run ESLint
+npm run format       # Format code with Prettier
+npm run format:check # Check code formatting
+```
+
+### Tech Stack
+
+- **Framework**: Lit 3.3.1 (Web Components)
+- **Build Tool**: Vite 8.0.1
+- **Language**: JavaScript ES2020+
+- **Styling**: Plain CSS with CSS Custom Properties
+- **Bundle Size**: ~60KB (well under 100KB target)
+
+### Project Structure
+
+```
+src/
+├── api/
+│   ├── gamefront-client.js    # GraphQL API client
+│   └── queries.js              # GraphQL queries
+├── components/
+│   ├── pie-app.js              # Root component & router
+│   ├── pie-header.js           # Header with search
+│   ├── pie-footer.js           # Footer with settings
+│   ├── pie-games-list.js       # Games grid
+│   ├── pie-game-detail.js      # Game details
+│   ├── pie-mod-detail.js       # Mod details
+│   ├── pie-api-key-modal.js    # API key configuration
+│   └── pie-spinner.js          # Loading indicator
+├── utils/
+│   ├── text-replacer.js        # File→Pie replacement
+│   └── router.js               # History API router
+├── styles/
+│   ├── retro-theme.css         # Color palette
+│   ├── main.css                # Base styles
+│   └── responsive.css          # Media queries
+└── main.js                     # App entry point
+```
+
+### CORS Handling
+
+Development uses a Vite proxy to avoid CORS issues:
+- **Dev**: `/api/v1/graphql` (proxied through Vite)
+- **Production**: `https://www.gamefront.com/api/v1/graphql` (direct)
 
 ## 📦 Deployment
 
