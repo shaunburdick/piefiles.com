@@ -46,8 +46,8 @@ export const GAME_QUERY = `
 `
 
 export const MODS_QUERY = `
-  query Mods($gameSlug: String!, $first: Int!, $page: Int!) {
-    mods(game_slug: $gameSlug, first: $first, page: $page) {
+  query Files($gameSlug: String!, $first: Int!, $page: Int!) {
+    files(game_slug: $gameSlug, first: $first, page: $page) {
       data {
         id
         title
@@ -72,8 +72,8 @@ export const MODS_QUERY = `
 `
 
 export const MOD_QUERY = `
-  query Mod($id: ID!) {
-    mod(id: $id) {
+  query File($id: ID!) {
+    file(id: $id) {
       id
       title
       slug
