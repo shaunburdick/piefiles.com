@@ -63,15 +63,16 @@ class GameFrontClient {
     }
 
     const apiKey = this.getApiKey()
-    if (!apiKey) {
-      throw new Error('API_KEY_REQUIRED')
-    }
 
     const headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
       'User-Agent': USER_AGENT
+    }
+
+    // Add Authorization header only if API key is provided
+    if (apiKey) {
+      headers['Authorization'] = `Bearer ${apiKey}`
     }
 
     try {

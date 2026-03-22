@@ -34,19 +34,9 @@ export class PieApp extends LitElement {
 
   constructor() {
     super()
-    this.currentView = 'loading'
+    this.currentView = 'home'
     this.showApiKeyModal = false
-    this.loading = true
-    
-    // Check if API key exists
-    const apiKey = apiClient.getApiKey()
-    if (!apiKey) {
-      this.showApiKeyModal = true
-      this.loading = false
-    } else {
-      this.loading = false
-      this.currentView = 'home'
-    }
+    this.loading = false
   }
 
   connectedCallback() {
@@ -59,10 +49,8 @@ export class PieApp extends LitElement {
     router.addRoute('/about', () => this.showAbout())
     router.addRoute('/404', () => this.show404())
     
-    // Start router if we have an API key
-    if (apiClient.getApiKey()) {
-      router.start()
-    }
+    // Start router (works with or without API key)
+    router.start()
   }
 
   showHome() {
