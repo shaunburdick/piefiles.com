@@ -1,8 +1,8 @@
-import { LitElement, html, css } from 'lit'
-import { DISCLAIMER, GAMEFRONT_URL } from '../config.js'
+import { LitElement, html, css } from 'lit';
+import { DISCLAIMER, GAMEFRONT_URL } from '../config.js';
 
 export class PieFooter extends LitElement {
-  static styles = css`
+    static styles = css`
     :host {
       display: block;
       margin-top: auto;
@@ -57,21 +57,19 @@ export class PieFooter extends LitElement {
       font-size: 10px;
       opacity: 0.9;
     }
-  `
+  `;
 
-  handleClearApiKey() {
-    if (confirm('Are you sure you want to clear your API key? You will need to enter it again.')) {
-      this.dispatchEvent(
-        new CustomEvent('clear-api-key', {
-          bubbles: true,
-          composed: true,
-        })
-      )
+    handleClearApiKey() {
+        this.dispatchEvent(
+            new CustomEvent('clear-api-key-request', {
+                bubbles: true,
+                composed: true,
+            }),
+        );
     }
-  }
 
-  render() {
-    return html`
+    render() {
+        return html`
       <footer class="footer">
         <div class="footer-content">
           <div class="disclaimer">${DISCLAIMER}</div>
@@ -86,27 +84,28 @@ export class PieFooter extends LitElement {
             <a
               href="/about"
               @click=${(e) => {
-                e.preventDefault()
-                this.dispatchEvent(
-                  new CustomEvent('navigate', {
-                    detail: { path: '/about' },
-                    bubbles: true,
-                    composed: true,
-                  })
-                )
-              }}
+                    e.preventDefault();
+                    this.dispatchEvent(
+                        new CustomEvent('navigate', {
+                            detail: { path: '/about' },
+                            bubbles: true,
+                            composed: true,
+                        }),
+                    );
+                }}
             >
               About
             </a>
           </div>
 
           <div class="credits">
-            Made with 🥧 and humor • Original PieFiles.com (2005) • GameFront (1998-present)
+            Made with 🥧 and humor • Original PieFiles.com (2005) • GameFront
+            (1998-present)
           </div>
         </div>
       </footer>
-    `
-  }
+    `;
+    }
 }
 
-customElements.define('pie-footer', PieFooter)
+customElements.define('pie-footer', PieFooter);

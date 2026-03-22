@@ -1,4 +1,4 @@
-import DOMPurify from 'dompurify'
+import DOMPurify from 'dompurify';
 
 /**
  * Sanitizes HTML content to prevent XSS attacks
@@ -18,67 +18,67 @@ import DOMPurify from 'dompurify'
  * // Returns: '<p>Safe content</p>'
  */
 export function sanitizeHTML(html) {
-  if (!html || typeof html !== 'string') {
-    return ''
-  }
+    if (!html || typeof html !== 'string') {
+        return '';
+    }
 
-  // Configure DOMPurify with strict settings
-  const config = {
+    // Configure DOMPurify with strict settings
+    const config = {
     // Allow only safe formatting tags commonly used in descriptions
-    ALLOWED_TAGS: [
-      'p',
-      'br',
-      'strong',
-      'b',
-      'em',
-      'i',
-      'u',
-      'a',
-      'ul',
-      'ol',
-      'li',
-      'h1',
-      'h2',
-      'h3',
-      'h4',
-      'h5',
-      'h6',
-      'blockquote',
-      'code',
-      'pre',
-      'span',
-      'div',
-    ],
+        ALLOWED_TAGS: [
+            'p',
+            'br',
+            'strong',
+            'b',
+            'em',
+            'i',
+            'u',
+            'a',
+            'ul',
+            'ol',
+            'li',
+            'h1',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
+            'blockquote',
+            'code',
+            'pre',
+            'span',
+            'div',
+        ],
 
-    // Allow only href attribute on links, and only http/https protocols
-    ALLOWED_ATTR: ['href', 'class'],
-    ALLOWED_URI_REGEXP: /^https?:\/\//,
+        // Allow only href attribute on links, and only http/https protocols
+        ALLOWED_ATTR: ['href', 'class'],
+        ALLOWED_URI_REGEXP: /^https?:\/\//,
 
-    // Remove any elements that could execute scripts
-    FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button'],
+        // Remove any elements that could execute scripts
+        FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button'],
 
-    // Remove all event handlers (onclick, onerror, etc.)
-    FORBID_ATTR: [
-      'onclick',
-      'onload',
-      'onerror',
-      'onmouseover',
-      'onmouseout',
-      'onfocus',
-      'onblur',
-      'onchange',
-      'onsubmit',
-    ],
+        // Remove all event handlers (onclick, onerror, etc.)
+        FORBID_ATTR: [
+            'onclick',
+            'onload',
+            'onerror',
+            'onmouseover',
+            'onmouseout',
+            'onfocus',
+            'onblur',
+            'onchange',
+            'onsubmit',
+        ],
 
-    // Return a string (not a DOM node)
-    RETURN_DOM: false,
-    RETURN_DOM_FRAGMENT: false,
+        // Return a string (not a DOM node)
+        RETURN_DOM: false,
+        RETURN_DOM_FRAGMENT: false,
 
-    // Keep safe HTML entities
-    KEEP_CONTENT: true,
-  }
+        // Keep safe HTML entities
+        KEEP_CONTENT: true,
+    };
 
-  return DOMPurify.sanitize(html, config)
+    return DOMPurify.sanitize(html, config);
 }
 
 /**
@@ -96,18 +96,18 @@ export function sanitizeHTML(html) {
  * // Returns: '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;'
  */
 export function escapeHTML(text) {
-  if (!text || typeof text !== 'string') {
-    return ''
-  }
+    if (!text || typeof text !== 'string') {
+        return '';
+    }
 
-  const escapeMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#x27;',
-    '/': '&#x2F;',
-  }
+    const escapeMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#x27;',
+        '/': '&#x2F;',
+    };
 
-  return text.replace(/[&<>"'/]/g, (char) => escapeMap[char])
+    return text.replace(/[&<>"'/]/g, (char) => escapeMap[char]);
 }

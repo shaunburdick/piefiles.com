@@ -1,0 +1,41 @@
+name: PR Checks
+
+on:
+  # Runs on pull requests
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  # Lint and build check job
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Build site
+        run: npm run build
+
+      - name: Check bundle size
+        run: |
+          BUNDLE_SIZE=$(stat -c%s dist/assets/index-*.js | awk '{sum+=$1} END {print sum}')
+          BUNDLE_SIZE_KB=$((BUNDLE_SIZE / 1024))
+          echo "Bundle size: ${BUNDLE_SIZE_KB} KB"
+          if [ $BUNDLE_SIZE_KB -gt 100 ]; then
+            echo "❌ Bundle size exceeds 100KB limit! (${BUNDLE_SIZE_KB} KB)"
+            exit 1
+          else
+            echo "✅ Bundle size is within 100KB limit (${BUNDLE_SIZE_KB} KB)"
+          fi

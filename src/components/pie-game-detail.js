@@ -1,12 +1,12 @@
-import { LitElement, html, css } from 'lit'
-import { unsafeHTML } from 'lit/directives/unsafe-html.js'
-import { apiClient } from '../api/gamefront-client.js'
-import { replaceTextInElement } from '../utils/text-replacer.js'
-import { sanitizeHTML } from '../utils/sanitize.js'
-import './pie-spinner.js'
+import { LitElement, html, css } from 'lit';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import { apiClient } from '../api/gamefront-client.js';
+import { replaceTextInElement } from '../utils/text-replacer.js';
+import { sanitizeHTML } from '../utils/sanitize.js';
+import './pie-spinner.js';
 
 export class PieGameDetail extends LitElement {
-  static styles = css`
+    static styles = css`
     :host {
       display: block;
     }
@@ -162,212 +162,232 @@ export class PieGameDetail extends LitElement {
       background-color: var(--color-content-bg, #d0aa68);
       border: 1px solid var(--color-border, #000000);
     }
-  `
+  `;
 
-  static properties = {
-    slug: { type: String },
-    game: { type: Object },
-    mods: { type: Array },
-    loading: { type: Boolean },
-    error: { type: String },
-    currentPage: { type: Number },
-    totalPages: { type: Number },
-    hasMore: { type: Boolean },
-  }
+    static properties = {
+        slug: { type: String },
+        game: { type: Object },
+        mods: { type: Array },
+        loading: { type: Boolean },
+        error: { type: String },
+        currentPage: { type: Number },
+        totalPages: { type: Number },
+        hasMore: { type: Boolean },
+    };
 
-  constructor() {
-    super()
-    this.slug = ''
-    this.game = null
-    this.mods = []
-    this.loading = true
-    this.error = ''
-    this.currentPage = 1
-    this.totalPages = 1
-    this.hasMore = false
-  }
-
-  async connectedCallback() {
-    super.connectedCallback()
-    await this.loadGameAndMods()
-  }
-
-  async loadGameAndMods() {
-    this.loading = true
-    this.error = ''
-
-    try {
-      // Load game details
-      this.game = await apiClient.getGame(this.slug)
-
-      // Load mods for this game
-      const result = await apiClient.getMods(this.slug, {
-        page: this.currentPage,
-        perPage: 20,
-      })
-
-      this.mods = result.data
-      this.currentPage = result.paginatorInfo.currentPage
-      this.totalPages = result.paginatorInfo.lastPage
-      this.hasMore = result.paginatorInfo.hasMorePages
-    } catch (err) {
-      console.error('Failed to load game:', err)
-      this.error = apiClient.getErrorMessage(err)
-    } finally {
-      this.loading = false
+    constructor() {
+        super();
+        this.slug = '';
+        this.game = null;
+        this.mods = [];
+        this.loading = true;
+        this.error = '';
+        this.currentPage = 1;
+        this.totalPages = 1;
+        this.hasMore = false;
     }
-  }
 
-  handleBackClick() {
-    this.dispatchEvent(
-      new CustomEvent('navigate-back', {
-        bubbles: true,
-        composed: true,
-      })
-    )
-  }
-
-  handleModClick(mod) {
-    this.dispatchEvent(
-      new CustomEvent('mod-selected', {
-        detail: {
-          slug: mod.slug,
-          gameSlug: this.slug,
-        },
-        bubbles: true,
-        composed: true,
-      })
-    )
-  }
-
-  async handlePrevPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--
-      await this.loadGameAndMods()
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    async connectedCallback() {
+        super.connectedCallback();
+        await this.loadGameAndMods();
     }
-  }
 
-  async handleNextPage() {
-    if (this.hasMore) {
-      this.currentPage++
-      await this.loadGameAndMods()
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    async loadGameAndMods() {
+        this.loading = true;
+        this.error = '';
+
+        try {
+            // Load game details
+            this.game = await apiClient.getGame(this.slug);
+
+            // Load mods for this game
+            const result = await apiClient.getMods(this.slug, {
+                page: this.currentPage,
+                perPage: 20,
+            });
+
+            this.mods = result.data;
+            this.currentPage = result.paginatorInfo.currentPage;
+            this.totalPages = result.paginatorInfo.lastPage;
+            this.hasMore = result.paginatorInfo.hasMorePages;
+        } catch (err) {
+            this.error = apiClient.getErrorMessage(err);
+        } finally {
+            this.loading = false;
+        }
     }
-  }
 
-  formatDate(dateString) {
-    const date = new Date(dateString)
-    return date.toLocaleDateString()
-  }
+    handleBackClick() {
+        this.dispatchEvent(
+            new CustomEvent('navigate-back', {
+                bubbles: true,
+                composed: true,
+            }),
+        );
+    }
 
-  formatFileSize(bytes) {
-    if (!bytes) return 'Unknown size'
-    const mb = bytes / (1024 * 1024)
-    return `${mb.toFixed(2)} MB`
-  }
+    handleModClick(mod) {
+        this.dispatchEvent(
+            new CustomEvent('mod-selected', {
+                detail: {
+                    slug: mod.slug,
+                    gameSlug: this.slug,
+                },
+                bubbles: true,
+                composed: true,
+            }),
+        );
+    }
 
-  updated() {
+    async handlePrevPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            await this.loadGameAndMods();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    async handleNextPage() {
+        if (this.hasMore) {
+            this.currentPage++;
+            await this.loadGameAndMods();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString();
+    }
+
+    formatFileSize(bytes) {
+        if (!bytes) {
+            return 'Unknown size';
+        }
+        const mb = bytes / (1024 * 1024);
+        return `${mb.toFixed(2)} MB`;
+    }
+
+    updated() {
     // Apply text replacement after render
-    replaceTextInElement(this.shadowRoot)
-  }
-
-  render() {
-    if (this.loading) {
-      return html`<pie-spinner message="Loading game details..."></pie-spinner>`
+        replaceTextInElement(this.shadowRoot);
     }
 
-    if (this.error) {
-      return html`
+    render() {
+        if (this.loading) {
+            return html`<pie-spinner
+        message="Loading game details..."
+      ></pie-spinner>`;
+        }
+
+        if (this.error) {
+            return html`
         <div class="error">
           <strong>Error:</strong> ${this.error} <br /><br />
           <button @click=${this.loadGameAndMods}>Retry</button>
           <button @click=${this.handleBackClick}>Go Back</button>
         </div>
-      `
-    }
+      `;
+        }
 
-    if (!this.game) {
-      return html`
+        if (!this.game) {
+            return html`
         <div class="error">
           Game not found.
           <br /><br />
           <button @click=${this.handleBackClick}>Go Back</button>
         </div>
-      `
-    }
+      `;
+        }
 
-    return html`
-      <button class="back-button" @click=${this.handleBackClick}>← Back to Games</button>
+        return html`
+      <button class="back-button" @click=${this.handleBackClick}>
+        ← Back to Games
+      </button>
 
       <div class="game-header">
         <h1>${this.game.title}</h1>
         <div class="game-meta">${this.game.file_count} files available</div>
 
         ${this.game.categories && this.game.categories.length > 0
-          ? html`
+            ? html`
               <div class="categories">
                 ${this.game.categories.map(
-                  (cat) => html` <span class="category-tag">${cat.name}</span> `
+                    (cat) => html`
+                    <span class="category-tag">${cat.name}</span>
+                  `,
                 )}
               </div>
             `
-          : ''}
+            : ''}
       </div>
 
       <div class="mods-section">
         <h2>Available Mods</h2>
 
         ${this.mods.length === 0
-          ? html`
+            ? html`
               <div class="no-mods">
                 <h3>No Pies Found</h3>
                 <p>No mods are available for this game yet.</p>
               </div>
             `
-          : html`
+            : html`
               <div class="mods-grid">
                 ${this.mods.map(
-                  (mod) => html`
-                    <div class="mod-card" @click=${() => this.handleModClick(mod)}>
+                    (mod) => html`
+                    <div
+                      class="mod-card"
+                      @click=${() => this.handleModClick(mod)}
+                    >
                       <h3>${mod.title}</h3>
                       ${mod.description
-                        ? html`
+                            ? html`
                             <div class="description">
                               ${unsafeHTML(sanitizeHTML(mod.description))}
                             </div>
                           `
-                        : ''}
+                            : ''}
                       <div class="meta">
                         ${mod.downloads || 0} downloads
-                        ${mod.created_at ? ` • ${this.formatDate(mod.created_at)}` : ''}
+                        ${mod.created_at
+                            ? ` • ${this.formatDate(mod.created_at)}`
+                            : ''}
                       </div>
                     </div>
-                  `
+                  `,
                 )}
               </div>
 
               ${this.totalPages > 1
-                ? html`
+                    ? html`
                     <div class="pagination">
-                      <button @click=${this.handlePrevPage} ?disabled=${this.currentPage === 1}>
+                      <button
+                        @click=${this.handlePrevPage}
+                        ?disabled=${this.currentPage === 1}
+                      >
                         ← Previous
                       </button>
 
-                      <span style="color: var(--color-primary-text); font-size: 12px;">
+                      <span
+                        style="color: var(--color-primary-text); font-size: 12px;"
+                      >
                         Page ${this.currentPage} of ${this.totalPages}
                       </span>
 
-                      <button @click=${this.handleNextPage} ?disabled=${!this.hasMore}>
+                      <button
+                        @click=${this.handleNextPage}
+                        ?disabled=${!this.hasMore}
+                      >
                         Next →
                       </button>
                     </div>
                   `
-                : ''}
+                    : ''}
             `}
       </div>
-    `
-  }
+    `;
+    }
 }
 
-customElements.define('pie-game-detail', PieGameDetail)
+customElements.define('pie-game-detail', PieGameDetail);

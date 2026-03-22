@@ -1,11 +1,11 @@
-import { LitElement, html, css } from 'lit'
-import { apiClient } from '../api/gamefront-client.js'
-import { replaceTextInElement } from '../utils/text-replacer.js'
-import { getSafeImageURL } from '../utils/image-validator.js'
-import './pie-spinner.js'
+import { LitElement, html, css } from 'lit';
+import { apiClient } from '../api/gamefront-client.js';
+import { replaceTextInElement } from '../utils/text-replacer.js';
+import { getSafeImageURL } from '../utils/image-validator.js';
+import './pie-spinner.js';
 
 export class PieGamesList extends LitElement {
-  static styles = css`
+    static styles = css`
     :host {
       display: block;
     }
@@ -199,292 +199,318 @@ export class PieGamesList extends LitElement {
       padding: 40px;
       color: var(--color-primary-text, #543f20);
     }
-  `
+  `;
 
-  static properties = {
-    games: { type: Array },
-    loading: { type: Boolean },
-    error: { type: String },
-    currentPage: { type: Number },
-    totalPages: { type: Number },
-    hasMore: { type: Boolean },
-    searchQuery: { type: String },
-    expandedTags: { type: Object },
-  }
+    static properties = {
+        games: { type: Array },
+        loading: { type: Boolean },
+        error: { type: String },
+        currentPage: { type: Number },
+        totalPages: { type: Number },
+        hasMore: { type: Boolean },
+        searchQuery: { type: String },
+        expandedTags: { type: Object },
+    };
 
-  constructor() {
-    super()
-    this.games = []
-    this.loading = true
-    this.error = ''
-    this.currentPage = 1
-    this.totalPages = 1
-    this.hasMore = false
-    this.searchQuery = ''
-    this.expandedTags = {}
-  }
-
-  connectedCallback() {
-    super.connectedCallback()
-
-    // If searchQuery wasn't passed as property, get it from URL
-    if (!this.searchQuery) {
-      const params = new URLSearchParams(window.location.search)
-      this.searchQuery = params.get('search') || ''
+    constructor() {
+        super();
+        this.games = [];
+        this.loading = true;
+        this.error = '';
+        this.currentPage = 1;
+        this.totalPages = 1;
+        this.hasMore = false;
+        this.searchQuery = '';
+        this.expandedTags = {};
     }
 
-    this.loadGames()
-  }
+    connectedCallback() {
+        super.connectedCallback();
 
-  /**
-   * Called when a reactive property changes
-   * Reload games when searchQuery changes
-   */
-  willUpdate(changedProperties) {
-    if (changedProperties.has('searchQuery') && this.hasUpdated) {
-      // Reset to page 1 when search query changes
-      this.currentPage = 1
-      this.loadGames()
-    }
-  }
+        // If searchQuery wasn't passed as property, get it from URL
+        if (!this.searchQuery) {
+            const params = new URLSearchParams(window.location.search);
+            this.searchQuery = params.get('search') || '';
+        }
 
-  async loadGames() {
-    this.loading = true
-    this.error = ''
-
-    try {
-      const result = await apiClient.getGames({
-        search: this.searchQuery,
-        page: this.currentPage,
-        perPage: 20,
-        orderBy: 'FILE_COUNT',
-        orderDirection: 'DESC',
-      })
-
-      this.games = result.data
-      this.currentPage = result.paginatorInfo.currentPage
-      this.totalPages = result.paginatorInfo.lastPage
-      this.hasMore = result.paginatorInfo.hasMorePages
-      // Reset expanded tags when loading new games
-      this.expandedTags = {}
-    } catch (err) {
-      console.error('Failed to load games:', err)
-      this.error = apiClient.getErrorMessage(err)
-    } finally {
-      this.loading = false
-    }
-  }
-
-  /**
-   * Get unique categories for a game (deduplicated by ID)
-   * @param {Object} game - Game object with categories
-   * @returns {Array} Unique categories
-   */
-  getUniqueCategories(game) {
-    if (!game.categories || game.categories.length === 0) {
-      return []
+        this.loadGames();
     }
 
-    const seen = new Set()
-    return game.categories.filter((cat) => {
-      if (seen.has(cat.id)) {
-        return false
-      }
-      seen.add(cat.id)
-      return true
-    })
-  }
-
-  /**
-   * Toggle showing all tags for a game
-   * @param {Event} e - Click event
-   * @param {string} gameId - Game ID
-   */
-  handleToggleTags(e, gameId) {
-    e.stopPropagation()
-    this.expandedTags = {
-      ...this.expandedTags,
-      [gameId]: !this.expandedTags[gameId],
+    /**
+     * Called when a reactive property changes
+     * Reload games when searchQuery changes
+     */
+    willUpdate(changedProperties) {
+        if (changedProperties.has('searchQuery') && this.hasUpdated) {
+            // Reset to page 1 when search query changes
+            this.currentPage = 1;
+            this.loadGames();
+        }
     }
-  }
 
-  /**
-   * Strip HTML tags from description
-   * @param {string} html - HTML string
-   * @returns {string} Plain text
-   */
-  stripHtml(html) {
-    if (!html) return ''
-    const div = document.createElement('div')
-    div.innerHTML = html
-    return div.textContent || div.innerText || ''
-  }
+    async loadGames() {
+        this.loading = true;
+        this.error = '';
 
-  /**
-   * Get the first image for a game
-   * @param {Object} game - Game object
-   * @returns {string|null} Image path or null
-   */
-  getFirstImage(game) {
+        try {
+            const result = await apiClient.getGames({
+                search: this.searchQuery,
+                page: this.currentPage,
+                perPage: 20,
+                orderBy: 'FILE_COUNT',
+                orderDirection: 'DESC',
+            });
+
+            this.games = result.data;
+            this.currentPage = result.paginatorInfo.currentPage;
+            this.totalPages = result.paginatorInfo.lastPage;
+            this.hasMore = result.paginatorInfo.hasMorePages;
+            // Reset expanded tags when loading new games
+            this.expandedTags = {};
+        } catch (err) {
+            this.error = apiClient.getErrorMessage(err);
+        } finally {
+            this.loading = false;
+        }
+    }
+
+    /**
+     * Get unique categories for a game (deduplicated by ID)
+     *
+     * @param {Object} game - Game object with categories
+     * @returns {Array} Unique categories
+     */
+    getUniqueCategories(game) {
+        if (!game.categories || game.categories.length === 0) {
+            return [];
+        }
+
+        const seen = new Set();
+        return game.categories.filter((cat) => {
+            if (seen.has(cat.id)) {
+                return false;
+            }
+            seen.add(cat.id);
+            return true;
+        });
+    }
+
+    /**
+     * Toggle showing all tags for a game
+     *
+     * @param {Event} e - Click event
+     * @param {string} gameId - Game ID
+     */
+    handleToggleTags(e, gameId) {
+        e.stopPropagation();
+        this.expandedTags = {
+            ...this.expandedTags,
+            [gameId]: !this.expandedTags[gameId],
+        };
+    }
+
+    /**
+     * Strip HTML tags from a string
+     *
+     * @param {string} htmlString - HTML string
+     * @returns {string} Plain text
+     */
+    stripHtml(htmlString) {
+        if (!htmlString) {
+            return '';
+        }
+        const div = document.createElement('div');
+        div.innerHTML = htmlString;
+        return div.textContent || div.innerText || '';
+    }
+
+    /**
+     * Get the first image for a game
+     *
+     * @param {Object} game - Game object
+     * @returns {string|null} Image path or null
+     */
+    getFirstImage(game) {
     // Use box_art if available
-    if (game.box_art) {
-      return getSafeImageURL(game.box_art)
+        if (game.box_art) {
+            return getSafeImageURL(game.box_art);
+        }
+        return null;
     }
-    return null
-  }
 
-  handleGameClick(game) {
-    this.dispatchEvent(
-      new CustomEvent('game-selected', {
-        detail: { slug: game.slug },
-        bubbles: true,
-        composed: true,
-      })
-    )
-  }
-
-  handleConfigureApiKey() {
-    this.dispatchEvent(
-      new CustomEvent('open-api-key-modal', {
-        bubbles: true,
-        composed: true,
-      })
-    )
-  }
-
-  async handlePrevPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--
-      await this.loadGames()
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    handleGameClick(game) {
+        this.dispatchEvent(
+            new CustomEvent('game-selected', {
+                detail: { slug: game.slug },
+                bubbles: true,
+                composed: true,
+            }),
+        );
     }
-  }
 
-  async handleNextPage() {
-    if (this.hasMore) {
-      this.currentPage++
-      await this.loadGames()
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    handleConfigureApiKey() {
+        this.dispatchEvent(
+            new CustomEvent('open-api-key-modal', {
+                bubbles: true,
+                composed: true,
+            }),
+        );
     }
-  }
 
-  updated() {
+    async handlePrevPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            await this.loadGames();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    async handleNextPage() {
+        if (this.hasMore) {
+            this.currentPage++;
+            await this.loadGames();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    updated() {
     // Apply text replacement after render
-    replaceTextInElement(this.shadowRoot)
-  }
-
-  render() {
-    if (this.loading) {
-      return html`<pie-spinner message="Loading games..."></pie-spinner>`
+        replaceTextInElement(this.shadowRoot);
     }
 
-    if (this.error) {
-      const isAuthError = this.error.includes('API key') || this.error.includes('authentication')
-      return html`
+    render() {
+        if (this.loading) {
+            return html`<pie-spinner message="Loading games..."></pie-spinner>`;
+        }
+
+        if (this.error) {
+            const isAuthError =
+                this.error.includes('API key') || this.error.includes('authentication');
+            return html`
         <div class="error">
           <strong>Error:</strong> ${this.error} <br /><br />
           <button @click=${this.loadGames}>Retry</button>
           ${isAuthError
-            ? html`
-                <button @click=${this.handleConfigureApiKey} style="margin-left: 8px;">
+                ? html`
+                <button
+                  @click=${this.handleConfigureApiKey}
+                  style="margin-left: 8px;"
+                >
                   Configure API Key
                 </button>
               `
-            : ''}
+                : ''}
         </div>
-      `
-    }
+      `;
+        }
 
-    if (this.games.length === 0) {
-      return html`
+        if (this.games.length === 0) {
+            return html`
         <div class="no-results">
           <h2>No Pies Found</h2>
           <p>
             ${this.searchQuery
-              ? `No games matching "${this.searchQuery}" were found.`
-              : 'No games available at this time.'}
+                ? `No games matching "${this.searchQuery}" were found.`
+                : 'No games available at this time.'}
           </p>
         </div>
-      `
-    }
+      `;
+        }
 
-    return html`
+        return html`
       ${this.searchQuery
-        ? html`
+            ? html`
             <div style="margin-bottom: 16px; color: var(--color-primary-text);">
               <strong>Search results for:</strong> "${this.searchQuery}"
             </div>
           `
-        : ''}
+            : ''}
 
       <div class="games-grid">
         ${this.games.map((game) => {
-          const uniqueCategories = this.getUniqueCategories(game)
-          const isExpanded = this.expandedTags[game.id]
-          const visibleCategories = isExpanded ? uniqueCategories : uniqueCategories.slice(0, 10)
-          const hasMoreCategories = uniqueCategories.length > 10
-          const firstImage = this.getFirstImage(game)
+            const uniqueCategories = this.getUniqueCategories(game);
+            const isExpanded = this.expandedTags[game.id];
+            const visibleCategories = isExpanded
+                ? uniqueCategories
+                : uniqueCategories.slice(0, 10);
+            const hasMoreCategories = uniqueCategories.length > 10;
+            const firstImage = this.getFirstImage(game);
 
-          return html`
+            return html`
             <div class="game-card" @click=${() => this.handleGameClick(game)}>
               ${firstImage
-                ? html`<img
+                    ? html`<img
                     src="${firstImage}"
                     alt="${game.title}"
                     class="game-image"
                     loading="lazy"
                   />`
-                : html`<div class="no-image">${game.title.charAt(0).toUpperCase()}</div>`}
+                    : html`<div class="no-image">
+                    ${game.title.charAt(0).toUpperCase()}
+                  </div>`}
 
               <div class="game-card-content">
                 <h3>${game.title}</h3>
                 <div class="file-count">${game.file_count} files available</div>
 
                 ${game.description
-                  ? html` <div class="description">${this.stripHtml(game.description)}</div> `
-                  : ''}
-                ${uniqueCategories.length > 0
-                  ? html`
-                      <div class="categories">
-                        ${visibleCategories.map(
-                          (cat) => html`<span class="category-tag">${cat.name}</span>`
-                        )}
-                        ${hasMoreCategories
-                          ? html`
-                              <span
-                                class="show-more-tags"
-                                @click=${(e) => this.handleToggleTags(e, game.id)}
-                              >
-                                ${isExpanded
-                                  ? 'Show Less'
-                                  : `+${uniqueCategories.length - 10} More`}
-                              </span>
-                            `
-                          : ''}
+                    ? html`
+                      <div class="description">
+                        ${this.stripHtml(game.description)}
                       </div>
                     `
-                  : ''}
+                    : ''}
+                ${uniqueCategories.length > 0
+                    ? html`
+                      <div class="categories">
+                        ${visibleCategories.map(
+                            (cat) =>
+                                html`<span class="category-tag">${cat.name}</span>`,
+                        )}
+                        ${hasMoreCategories
+                            ? html`
+                              <span
+                                class="show-more-tags"
+                                @click=${(e) =>
+                                    this.handleToggleTags(e, game.id)}
+                              >
+                                ${isExpanded
+                                    ? 'Show Less'
+                                    : `+${uniqueCategories.length - 10} More`}
+                              </span>
+                            `
+                            : ''}
+                      </div>
+                    `
+                    : ''}
               </div>
             </div>
-          `
+          `;
         })}
       </div>
 
       ${this.totalPages > 1
-        ? html`
+            ? html`
             <div class="pagination">
-              <button @click=${this.handlePrevPage} ?disabled=${this.currentPage === 1}>
+              <button
+                @click=${this.handlePrevPage}
+                ?disabled=${this.currentPage === 1}
+              >
                 ← Previous
               </button>
 
-              <span class="page-info"> Page ${this.currentPage} of ${this.totalPages} </span>
+              <span class="page-info">
+                Page ${this.currentPage} of ${this.totalPages}
+              </span>
 
-              <button @click=${this.handleNextPage} ?disabled=${!this.hasMore}>Next →</button>
+              <button @click=${this.handleNextPage} ?disabled=${!this.hasMore}>
+                Next →
+              </button>
             </div>
           `
-        : ''}
-    `
-  }
+            : ''}
+    `;
+    }
 }
 
-customElements.define('pie-games-list', PieGamesList)
+customElements.define('pie-games-list', PieGamesList);
