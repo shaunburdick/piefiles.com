@@ -32,17 +32,21 @@ export class PieGamesList extends LitElement {
 
     .game-card {
       background-color: var(--color-content-bg, #d0aa68);
-      border: 1px solid var(--color-border, #000000);
+      border: 2px solid var(--color-border, #000000);
+      border-radius: 12px;
       padding: 0;
-      transition: background-color 0.2s;
+      transition: all 0.2s ease;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
     }
 
     .game-card:hover {
       background-color: var(--color-content-bg-alt, #b4a57e);
+      transform: translateY(-2px);
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.3);
     }
 
     .game-image {
@@ -50,8 +54,8 @@ export class PieGamesList extends LitElement {
       height: 240px;
       object-fit: contain;
       object-position: center;
-      border-bottom: 1px solid var(--color-border, #000000);
       background-color: var(--color-accent-brown-alt, #ad915f);
+      border-bottom: 2px dashed var(--color-border, #000000);
     }
 
     .no-image {
@@ -60,17 +64,17 @@ export class PieGamesList extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(
-        135deg,
-        var(--color-accent-brown-alt, #ad915f) 0%,
-        var(--color-accent-brown, #c89d5f) 100%
+      background: radial-gradient(
+        circle at 30% 30%,
+        var(--color-accent-brown, #c89d5f) 0%,
+        var(--color-accent-brown-alt, #ad915f) 100%
       );
-      border-bottom: 1px solid var(--color-border, #000000);
+      border-bottom: 2px dashed var(--color-border, #000000);
       color: var(--color-primary-text, #543f20);
       font-size: 48px;
       text-align: center;
       font-weight: bold;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .game-card-content {
@@ -115,24 +119,31 @@ export class PieGamesList extends LitElement {
     .category-tag {
       background-color: var(--color-accent-brown, #c89d5f);
       color: var(--color-white, #ffffff);
-      padding: 2px 8px;
+      padding: 4px 10px;
       font-size: 10px;
       border: 1px solid var(--color-border, #000000);
+      border-radius: 12px;
       white-space: nowrap;
+      box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
     }
 
     .show-more-tags {
       background-color: var(--color-accent-brown-alt, #ad915f);
       color: var(--color-white, #ffffff);
-      padding: 2px 8px;
+      padding: 4px 10px;
       font-size: 10px;
       border: 1px solid var(--color-border, #000000);
+      border-radius: 12px;
       cursor: pointer;
       white-space: nowrap;
+      box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
     }
 
     .show-more-tags:hover {
       background-color: var(--color-primary-text, #543f20);
+      transform: translateY(-1px);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
     }
 
     .pagination {
@@ -145,18 +156,23 @@ export class PieGamesList extends LitElement {
     }
 
     .pagination button {
-      padding: 8px 20px;
+      padding: 10px 24px;
       font-size: 12px;
       font-family: Arial, sans-serif;
       background-color: var(--color-accent-brown, #c89d5f);
       color: var(--color-white, #ffffff);
-      border: 1px solid var(--color-white, #ffffff);
+      border: 2px solid var(--color-border, #000000);
+      border-radius: 20px;
       cursor: pointer;
-      min-width: 80px;
+      min-width: 100px;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+      transition: all 0.2s ease;
     }
 
     .pagination button:hover:not(:disabled) {
       background-color: var(--color-accent-brown-alt, #ad915f);
+      transform: translateY(-2px);
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.3);
     }
 
     .pagination button:disabled {
