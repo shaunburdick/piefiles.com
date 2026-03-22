@@ -123,9 +123,12 @@ class GameFrontClient {
    * @returns {string} User-friendly message
    */
   getErrorMessage(error) {
+    const hasApiKey = !!this.getApiKey()
     const messages = {
       'API_KEY_REQUIRED': 'API key is required. Please configure your GameFront API key in settings.',
-      'UNAUTHORIZED': 'API key is invalid. Please check your GameFront API key.',
+      'UNAUTHORIZED': hasApiKey 
+        ? 'API key is invalid. Please check your GameFront API key in settings.'
+        : 'GameFront API requires authentication. Please configure your API key in settings (footer).',
       'RATE_LIMITED': 'Too many requests. Please wait a moment and try again.',
       'SERVER_ERROR': 'GameFront is experiencing issues. Please try again later.',
       'TIMEOUT': 'Request timed out. Please check your connection and try again.',

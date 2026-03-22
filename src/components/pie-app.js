@@ -131,6 +131,10 @@ export class PieApp extends LitElement {
     window.history.back()
   }
 
+  handleOpenApiKeyModal() {
+    this.showApiKeyModal = true
+  }
+
   renderView() {
     if (this.showApiKeyModal) {
       return html``
@@ -144,6 +148,7 @@ export class PieApp extends LitElement {
         return html`
           <pie-games-list
             @game-selected=${this.handleGameSelected}
+            @open-api-key-modal=${this.handleOpenApiKeyModal}
           ></pie-games-list>
         `
       

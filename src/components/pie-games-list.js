@@ -183,6 +183,13 @@ export class PieGamesList extends LitElement {
     }))
   }
 
+  handleConfigureApiKey() {
+    this.dispatchEvent(new CustomEvent('open-api-key-modal', {
+      bubbles: true,
+      composed: true
+    }))
+  }
+
   async handlePrevPage() {
     if (this.currentPage > 1) {
       this.currentPage--
@@ -210,11 +217,17 @@ export class PieGamesList extends LitElement {
     }
 
     if (this.error) {
+      const isAuthError = this.error.includes('API key') || this.error.includes('authentication')
       return html`
         <div class="error">
           <strong>Error:</strong> ${this.error}
           <br><br>
           <button @click=${this.loadGames}>Retry</button>
+          ${isAuthError ? html`
+            <button @click=${this.handleConfigureApiKey} style="margin-left: 8px;">
+              Configure API Key
+            </button>
+          ` : ''}
         </div>
       `
     }
