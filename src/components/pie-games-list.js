@@ -33,33 +33,83 @@ export class PieGamesList extends LitElement {
     .game-card {
       background-color: var(--color-content-bg, #d0aa68);
       border: 1px solid var(--color-border, #000000);
-      padding: 16px;
+      padding: 0;
       transition: background-color 0.2s;
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
     .game-card:hover {
       background-color: var(--color-content-bg-alt, #b4a57e);
     }
 
+    .game-image {
+      width: 100%;
+      height: 240px;
+      object-fit: contain;
+      object-position: center;
+      border-bottom: 1px solid var(--color-border, #000000);
+      background-color: var(--color-accent-brown-alt, #ad915f);
+    }
+
+    .no-image {
+      width: 100%;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(
+        135deg,
+        var(--color-accent-brown-alt, #ad915f) 0%,
+        var(--color-accent-brown, #c89d5f) 100%
+      );
+      border-bottom: 1px solid var(--color-border, #000000);
+      color: var(--color-primary-text, #543f20);
+      font-size: 48px;
+      text-align: center;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .game-card-content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
     .game-card h3 {
       color: var(--color-primary-text, #543f20);
       font-size: 14px;
-      margin: 0 0 8px 0;
+      margin: 0;
       font-weight: bold;
     }
 
     .game-card .file-count {
       color: var(--color-primary-text, #543f20);
       font-size: 12px;
-      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .game-card .description {
+      color: var(--color-primary-text, #543f20);
+      font-size: 11px;
+      line-height: 1.4;
+      margin: 4px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .game-card .categories {
       display: flex;
       flex-wrap: wrap;
       gap: 4px;
-      margin-top: 8px;
+      margin-top: 4px;
     }
 
     .category-tag {
@@ -68,6 +118,21 @@ export class PieGamesList extends LitElement {
       padding: 2px 8px;
       font-size: 10px;
       border: 1px solid var(--color-border, #000000);
+      white-space: nowrap;
+    }
+
+    .show-more-tags {
+      background-color: var(--color-accent-brown-alt, #ad915f);
+      color: var(--color-white, #ffffff);
+      padding: 2px 8px;
+      font-size: 10px;
+      border: 1px solid var(--color-border, #000000);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .show-more-tags:hover {
+      background-color: var(--color-primary-text, #543f20);
     }
 
     .pagination {
@@ -127,6 +192,7 @@ export class PieGamesList extends LitElement {
     totalPages: { type: Number },
     hasMore: { type: Boolean },
     searchQuery: { type: String },
+    expandedTags: { type: Object },
   }
 
   constructor() {
@@ -138,6 +204,7 @@ export class PieGamesList extends LitElement {
     this.totalPages = 1
     this.hasMore = false
     this.searchQuery = ''
+    this.expandedTags = {}
   }
 
   connectedCallback() {
@@ -181,12 +248,72 @@ export class PieGamesList extends LitElement {
       this.currentPage = result.paginatorInfo.currentPage
       this.totalPages = result.paginatorInfo.lastPage
       this.hasMore = result.paginatorInfo.hasMorePages
+      // Reset expanded tags when loading new games
+      this.expandedTags = {}
     } catch (err) {
       console.error('Failed to load games:', err)
       this.error = apiClient.getErrorMessage(err)
     } finally {
       this.loading = false
     }
+  }
+
+  /**
+   * Get unique categories for a game (deduplicated by ID)
+   * @param {Object} game - Game object with categories
+   * @returns {Array} Unique categories
+   */
+  getUniqueCategories(game) {
+    if (!game.categories || game.categories.length === 0) {
+      return []
+    }
+
+    const seen = new Set()
+    return game.categories.filter((cat) => {
+      if (seen.has(cat.id)) {
+        return false
+      }
+      seen.add(cat.id)
+      return true
+    })
+  }
+
+  /**
+   * Toggle showing all tags for a game
+   * @param {Event} e - Click event
+   * @param {string} gameId - Game ID
+   */
+  handleToggleTags(e, gameId) {
+    e.stopPropagation()
+    this.expandedTags = {
+      ...this.expandedTags,
+      [gameId]: !this.expandedTags[gameId],
+    }
+  }
+
+  /**
+   * Strip HTML tags from description
+   * @param {string} html - HTML string
+   * @returns {string} Plain text
+   */
+  stripHtml(html) {
+    if (!html) return ''
+    const div = document.createElement('div')
+    div.innerHTML = html
+    return div.textContent || div.innerText || ''
+  }
+
+  /**
+   * Get the first image for a game
+   * @param {Object} game - Game object
+   * @returns {string|null} Image path or null
+   */
+  getFirstImage(game) {
+    // Use box_art if available
+    if (game.box_art) {
+      return game.box_art
+    }
+    return null
   }
 
   handleGameClick(game) {
@@ -274,23 +401,56 @@ export class PieGamesList extends LitElement {
         : ''}
 
       <div class="games-grid">
-        ${this.games.map(
-          (game) => html`
+        ${this.games.map((game) => {
+          const uniqueCategories = this.getUniqueCategories(game)
+          const isExpanded = this.expandedTags[game.id]
+          const visibleCategories = isExpanded ? uniqueCategories : uniqueCategories.slice(0, 10)
+          const hasMoreCategories = uniqueCategories.length > 10
+          const firstImage = this.getFirstImage(game)
+
+          return html`
             <div class="game-card" @click=${() => this.handleGameClick(game)}>
-              <h3>${game.title}</h3>
-              <div class="file-count">${game.file_count} files available</div>
-              ${game.categories && game.categories.length > 0
-                ? html`
-                    <div class="categories">
-                      ${game.categories.map(
-                        (cat) => html` <span class="category-tag">${cat.name}</span> `
-                      )}
-                    </div>
-                  `
-                : ''}
+              ${firstImage
+                ? html`<img
+                    src="${firstImage}"
+                    alt="${game.title}"
+                    class="game-image"
+                    loading="lazy"
+                  />`
+                : html`<div class="no-image">${game.title.charAt(0).toUpperCase()}</div>`}
+
+              <div class="game-card-content">
+                <h3>${game.title}</h3>
+                <div class="file-count">${game.file_count} files available</div>
+
+                ${game.description
+                  ? html` <div class="description">${this.stripHtml(game.description)}</div> `
+                  : ''}
+                ${uniqueCategories.length > 0
+                  ? html`
+                      <div class="categories">
+                        ${visibleCategories.map(
+                          (cat) => html`<span class="category-tag">${cat.name}</span>`
+                        )}
+                        ${hasMoreCategories
+                          ? html`
+                              <span
+                                class="show-more-tags"
+                                @click=${(e) => this.handleToggleTags(e, game.id)}
+                              >
+                                ${isExpanded
+                                  ? 'Show Less'
+                                  : `+${uniqueCategories.length - 10} More`}
+                              </span>
+                            `
+                          : ''}
+                      </div>
+                    `
+                  : ''}
+              </div>
             </div>
           `
-        )}
+        })}
       </div>
 
       ${this.totalPages > 1

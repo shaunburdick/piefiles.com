@@ -12,6 +12,8 @@ export const GAMES_QUERY = `
         slug
         url
         file_count
+        description
+        box_art
         categories {
           id
           name
