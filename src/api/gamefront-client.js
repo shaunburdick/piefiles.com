@@ -196,12 +196,13 @@ class GameFrontClient {
   }
 
   /**
-   * Fetch single mod by ID
-   * @param {string} id - Mod ID
+   * Fetch single mod by slug and game slug
+   * @param {string} slug - Mod slug
+   * @param {string} gameSlug - Game slug
    * @returns {Promise<Object>} Mod data
    */
-  async getMod(id) {
-    const data = await this.request(MOD_QUERY, { id })
+  async getMod(slug, gameSlug) {
+    const data = await this.request(MOD_QUERY, { slug, gameSlug })
     if (!data.mod) {
       throw new Error('NOT_FOUND')
     }

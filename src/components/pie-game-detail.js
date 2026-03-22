@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit'
+import { unsafeHTML } from 'lit/directives/unsafe-html.js'
 import { apiClient } from '../api/gamefront-client.js'
 import { replaceTextInElement } from '../utils/text-replacer.js'
 import './pie-spinner.js'
@@ -228,7 +229,10 @@ export class PieGameDetail extends LitElement {
   handleModClick(mod) {
     this.dispatchEvent(
       new CustomEvent('mod-selected', {
-        detail: { id: mod.id },
+        detail: {
+          slug: mod.slug,
+          gameSlug: this.slug,
+        },
         bubbles: true,
         composed: true,
       })
@@ -327,7 +331,7 @@ export class PieGameDetail extends LitElement {
                     <div class="mod-card" @click=${() => this.handleModClick(mod)}>
                       <h3>${mod.title}</h3>
                       ${mod.description
-                        ? html` <div class="description">${mod.description}</div> `
+                        ? html` <div class="description">${unsafeHTML(mod.description)}</div> `
                         : ''}
                       <div class="meta">
                         ${mod.file_size ? `${this.formatFileSize(mod.file_size)} • ` : ''}

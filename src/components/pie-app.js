@@ -16,7 +16,7 @@ export class PieApp extends LitElement {
       flex-direction: column;
       min-height: 100vh;
     }
-    
+
     .main-content {
       flex: 1;
       max-width: 1200px;
@@ -29,7 +29,7 @@ export class PieApp extends LitElement {
   static properties = {
     currentView: { type: String },
     showApiKeyModal: { type: Boolean },
-    loading: { type: Boolean }
+    loading: { type: Boolean },
   }
 
   constructor() {
@@ -41,14 +41,16 @@ export class PieApp extends LitElement {
 
   connectedCallback() {
     super.connectedCallback()
-    
+
     // Set up router
     router.addRoute('/', () => this.showHome())
     router.addRoute('/games/:slug', (params) => this.showGame(params.slug))
-    router.addRoute('/mods/:id', (params) => this.showMod(params.id))
+    router.addRoute('/games/:gameSlug/mods/:modSlug', (params) =>
+      this.showMod(params.gameSlug, params.modSlug)
+    )
     router.addRoute('/about', () => this.showAbout())
     router.addRoute('/404', () => this.show404())
-    
+
     // Start router (works with or without API key)
     router.start()
   }
@@ -63,9 +65,10 @@ export class PieApp extends LitElement {
     this.requestUpdate()
   }
 
-  showMod(id) {
+  showMod(gameSlug, modSlug) {
     this.currentView = 'mod'
-    this.modId = id
+    this.gameSlug = gameSlug
+    this.modSlug = modSlug
     this.requestUpdate()
   }
 
@@ -79,11 +82,11 @@ export class PieApp extends LitElement {
 
   async handleTestApiKey(e) {
     const { apiKey } = e.detail
-    
+
     try {
       apiClient.setApiKey(apiKey)
       const isValid = await apiClient.testApiKey()
-      
+
       if (isValid) {
         this.showApiKeyModal = false
         this.currentView = 'home'
@@ -123,8 +126,8 @@ export class PieApp extends LitElement {
   }
 
   handleModSelected(e) {
-    const { modId } = e.detail
-    router.navigate(`/mods/${modId}`)
+    const { slug, gameSlug } = e.detail
+    router.navigate(`/games/${gameSlug}/mods/${slug}`)
   }
 
   handleNavigateBack() {
@@ -143,7 +146,7 @@ export class PieApp extends LitElement {
     switch (this.currentView) {
       case 'loading':
         return html`<pie-spinner message="Loading Pie Files..."></pie-spinner>`
-      
+
       case 'home':
         return html`
           <pie-games-list
@@ -151,7 +154,7 @@ export class PieApp extends LitElement {
             @open-api-key-modal=${this.handleOpenApiKeyModal}
           ></pie-games-list>
         `
-      
+
       case 'game':
         return html`
           <pie-game-detail
@@ -160,36 +163,37 @@ export class PieApp extends LitElement {
             @navigate-back=${this.handleNavigateBack}
           ></pie-game-detail>
         `
-      
+
       case 'mod':
         return html`
           <pie-mod-detail
-            .modId=${this.modId}
+            .modSlug=${this.modSlug}
+            .gameSlug=${this.gameSlug}
             @navigate-back=${this.handleNavigateBack}
             @game-selected=${this.handleGameSelected}
           ></pie-mod-detail>
         `
-      
+
       case 'about':
         return html`
           <div class="card">
             <h1>About Pie Files</h1>
             <p>
-              PieFiles.com is a humorous parody/joke site that displays gaming content from 
+              PieFiles.com is a humorous parody/joke site that displays gaming content from
               <a href="https://www.gamefront.com" target="_blank">GameFront.com</a>
               with a retro 2005 PieFiles theme and replaces all instances of "file" with "pie".
             </p>
             <p>
-              The original PieFiles.com was an Age of Mythology files site from 2005.
-              This project pays homage to that retro aesthetic while having fun with word replacement.
+              The original PieFiles.com was an Age of Mythology files site from 2005. This project
+              pays homage to that retro aesthetic while having fun with word replacement.
             </p>
             <p>
-              All gaming content is provided by GameFront via their public GraphQL API.
-              This site is not affiliated with or endorsed by GameFront.
+              All gaming content is provided by GameFront via their public GraphQL API. This site is
+              not affiliated with or endorsed by GameFront.
             </p>
           </div>
         `
-      
+
       case '404':
         return html`
           <div class="card center">
@@ -198,7 +202,7 @@ export class PieApp extends LitElement {
             <button @click=${() => router.navigate('/')}>Go Home</button>
           </div>
         `
-      
+
       default:
         return html`<pie-spinner></pie-spinner>`
     }
@@ -210,15 +214,11 @@ export class PieApp extends LitElement {
         @navigate-home=${this.handleNavigateHome}
         @search=${this.handleSearch}
       ></pie-header>
-      
-      <main class="main-content">
-        ${this.renderView()}
-      </main>
-      
-      <pie-footer
-        @clear-api-key=${this.handleClearApiKey}
-      ></pie-footer>
-      
+
+      <main class="main-content">${this.renderView()}</main>
+
+      <pie-footer @clear-api-key=${this.handleClearApiKey}></pie-footer>
+
       <pie-api-key-modal
         .open=${this.showApiKeyModal}
         @test-api-key=${this.handleTestApiKey}

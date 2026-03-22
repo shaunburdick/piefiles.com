@@ -8,53 +8,53 @@ export class PieModDetail extends LitElement {
     :host {
       display: block;
     }
-    
+
     .back-button {
       padding: 8px 16px;
       font-size: 12px;
       font-family: Arial, sans-serif;
-      background-color: var(--color-accent-brown, #C89D5F);
-      color: var(--color-white, #FFFFFF);
-      border: 1px solid var(--color-white, #FFFFFF);
+      background-color: var(--color-accent-brown, #c89d5f);
+      color: var(--color-white, #ffffff);
+      border: 1px solid var(--color-white, #ffffff);
       cursor: pointer;
       margin-bottom: 24px;
       display: inline-block;
     }
-    
+
     .back-button:hover {
-      background-color: var(--color-accent-brown-alt, #AD915F);
+      background-color: var(--color-accent-brown-alt, #ad915f);
     }
-    
+
     .mod-header {
-      background-color: var(--color-content-bg, #D0AA68);
+      background-color: var(--color-content-bg, #d0aa68);
       border: 1px solid var(--color-border, #000000);
       padding: 24px;
       margin-bottom: 24px;
     }
-    
+
     .mod-header h1 {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 24px;
       margin: 0 0 16px 0;
     }
-    
+
     .mod-meta {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 12px;
       margin-bottom: 16px;
       line-height: 1.8;
     }
-    
+
     .mod-meta strong {
       font-weight: bold;
     }
-    
+
     .download-button {
       padding: 12px 32px;
       font-size: 14px;
       font-family: Arial, sans-serif;
-      background-color: var(--color-accent-brown, #C89D5F);
-      color: var(--color-white, #FFFFFF);
+      background-color: var(--color-accent-brown, #c89d5f);
+      color: var(--color-white, #ffffff);
       border: 2px solid var(--color-border, #000000);
       cursor: pointer;
       font-weight: bold;
@@ -62,100 +62,102 @@ export class PieModDetail extends LitElement {
       text-decoration: none;
       margin-top: 16px;
     }
-    
+
     .download-button:hover {
-      background-color: var(--color-accent-brown-alt, #AD915F);
+      background-color: var(--color-accent-brown-alt, #ad915f);
     }
-    
+
     .game-info {
-      background-color: var(--color-content-bg-alt, #B4A57E);
+      background-color: var(--color-content-bg-alt, #b4a57e);
       padding: 12px;
       margin-bottom: 24px;
       border: 1px solid var(--color-border, #000000);
     }
-    
+
     .game-info a {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       text-decoration: underline;
       font-weight: bold;
     }
-    
+
     .game-info a:hover {
-      color: var(--color-link-hover, #FFFFFF);
+      color: var(--color-link-hover, #ffffff);
     }
-    
+
     .description-section {
-      background-color: var(--color-content-bg, #D0AA68);
+      background-color: var(--color-content-bg, #d0aa68);
       border: 1px solid var(--color-border, #000000);
       padding: 24px;
       margin-bottom: 24px;
     }
-    
+
     .description-section h2 {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 18px;
       margin: 0 0 12px 0;
     }
-    
+
     .description-section p {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 12px;
       line-height: 1.6;
       white-space: pre-wrap;
       word-wrap: break-word;
     }
-    
+
     .screenshots {
       margin-bottom: 24px;
     }
-    
+
     .screenshots h2 {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 18px;
       margin-bottom: 16px;
     }
-    
+
     .screenshots-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 16px;
     }
-    
+
     .screenshot {
       border: 1px solid var(--color-border, #000000);
       cursor: pointer;
       transition: transform 0.2s;
     }
-    
+
     .screenshot:hover {
       transform: scale(1.05);
     }
-    
+
     .screenshot img {
       width: 100%;
       height: auto;
       display: block;
     }
-    
+
     .error {
-      background-color: #FFE5E5;
-      color: #CC0000;
+      background-color: #ffe5e5;
+      color: #cc0000;
       padding: 16px;
-      border: 1px solid #CC0000;
+      border: 1px solid #cc0000;
       margin-bottom: 16px;
     }
   `
 
   static properties = {
-    modId: { type: String },
+    modSlug: { type: String },
+    gameSlug: { type: String },
     mod: { type: Object },
     loading: { type: Boolean },
-    error: { type: String }
+    error: { type: String },
   }
 
   constructor() {
     super()
-    this.modId = ''
+    this.modSlug = ''
+    this.gameSlug = ''
     this.mod = null
     this.loading = true
     this.error = ''
@@ -171,7 +173,7 @@ export class PieModDetail extends LitElement {
     this.error = ''
 
     try {
-      this.mod = await apiClient.getMod(this.modId)
+      this.mod = await apiClient.getMod(this.modSlug, this.gameSlug)
     } catch (err) {
       console.error('Failed to load mod:', err)
       this.error = apiClient.getErrorMessage(err)
@@ -181,30 +183,34 @@ export class PieModDetail extends LitElement {
   }
 
   handleBackClick() {
-    this.dispatchEvent(new CustomEvent('navigate-back', {
-      bubbles: true,
-      composed: true
-    }))
+    this.dispatchEvent(
+      new CustomEvent('navigate-back', {
+        bubbles: true,
+        composed: true,
+      })
+    )
   }
 
   handleGameClick(e) {
     e.preventDefault()
     if (this.mod?.game) {
-      this.dispatchEvent(new CustomEvent('game-selected', {
-        detail: { slug: this.mod.game.slug },
-        bubbles: true,
-        composed: true
-      }))
+      this.dispatchEvent(
+        new CustomEvent('game-selected', {
+          detail: { slug: this.mod.game.slug },
+          bubbles: true,
+          composed: true,
+        })
+      )
     }
   }
 
   formatDate(dateString) {
     if (!dateString) return 'Unknown'
     const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     })
   }
 
@@ -231,8 +237,7 @@ export class PieModDetail extends LitElement {
     if (this.error) {
       return html`
         <div class="error">
-          <strong>Error:</strong> ${this.error}
-          <br><br>
+          <strong>Error:</strong> ${this.error} <br /><br />
           <button @click=${this.loadMod}>Retry</button>
           <button @click=${this.handleBackClick}>Go Back</button>
         </div>
@@ -243,80 +248,87 @@ export class PieModDetail extends LitElement {
       return html`
         <div class="error">
           Mod not found.
-          <br><br>
+          <br /><br />
           <button @click=${this.handleBackClick}>Go Back</button>
         </div>
       `
     }
 
     return html`
-      <button class="back-button" @click=${this.handleBackClick}>
-        ← Back
-      </button>
+      <button class="back-button" @click=${this.handleBackClick}>← Back</button>
 
-      ${this.mod.game ? html`
-        <div class="game-info">
-          <strong>Game:</strong> 
-          <a href="#" @click=${this.handleGameClick}>
-            ${this.mod.game.title}
-          </a>
-        </div>
-      ` : ''}
+      ${this.mod.game
+        ? html`
+            <div class="game-info">
+              <strong>Game:</strong>
+              <a href="#" @click=${this.handleGameClick}> ${this.mod.game.title} </a>
+            </div>
+          `
+        : ''}
 
       <div class="mod-header">
         <h1>${this.mod.title}</h1>
-        
+
         <div class="mod-meta">
-          ${this.mod.author ? html`
-            <div><strong>Author:</strong> ${this.mod.author.name}</div>
-          ` : ''}
-          ${this.mod.file_size ? html`
-            <div><strong>File Size:</strong> ${this.formatFileSize(this.mod.file_size)}</div>
-          ` : ''}
+          ${this.mod.author
+            ? html` <div><strong>Author:</strong> ${this.mod.author.name}</div> `
+            : ''}
+          ${this.mod.file_size
+            ? html`
+                <div><strong>File Size:</strong> ${this.formatFileSize(this.mod.file_size)}</div>
+              `
+            : ''}
           <div><strong>Downloads:</strong> ${this.mod.download_count || 0}</div>
-          ${this.mod.created_at ? html`
-            <div><strong>Uploaded:</strong> ${this.formatDate(this.mod.created_at)}</div>
-          ` : ''}
-          ${this.mod.updated_at && this.mod.updated_at !== this.mod.created_at ? html`
-            <div><strong>Updated:</strong> ${this.formatDate(this.mod.updated_at)}</div>
-          ` : ''}
+          ${this.mod.created_at
+            ? html` <div><strong>Uploaded:</strong> ${this.formatDate(this.mod.created_at)}</div> `
+            : ''}
+          ${this.mod.updated_at && this.mod.updated_at !== this.mod.created_at
+            ? html` <div><strong>Updated:</strong> ${this.formatDate(this.mod.updated_at)}</div> `
+            : ''}
         </div>
 
-        ${this.mod.download_url ? html`
-          <a 
-            href=${this.mod.download_url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="download-button"
-          >
-            ⬇ Download This File
-          </a>
-        ` : ''}
+        ${this.mod.download_url
+          ? html`
+              <a
+                href=${this.mod.download_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="download-button"
+              >
+                ⬇ Download This File
+              </a>
+            `
+          : ''}
       </div>
 
-      ${this.mod.description ? html`
-        <div class="description-section">
-          <h2>Description</h2>
-          <p>${this.mod.description}</p>
-        </div>
-      ` : ''}
-
-      ${this.mod.screenshots && this.mod.screenshots.length > 0 ? html`
-        <div class="screenshots">
-          <h2>Screenshots</h2>
-          <div class="screenshots-grid">
-            ${this.mod.screenshots.map(screenshot => html`
-              <div class="screenshot">
-                <img 
-                  src=${screenshot.thumbnail_url || screenshot.url} 
-                  alt="Screenshot"
-                  loading="lazy"
-                />
+      ${this.mod.description
+        ? html`
+            <div class="description-section">
+              <h2>Description</h2>
+              <p>${this.mod.description}</p>
+            </div>
+          `
+        : ''}
+      ${this.mod.screenshots && this.mod.screenshots.length > 0
+        ? html`
+            <div class="screenshots">
+              <h2>Screenshots</h2>
+              <div class="screenshots-grid">
+                ${this.mod.screenshots.map(
+                  (screenshot) => html`
+                    <div class="screenshot">
+                      <img
+                        src=${screenshot.thumbnail_url || screenshot.url}
+                        alt="Screenshot"
+                        loading="lazy"
+                      />
+                    </div>
+                  `
+                )}
               </div>
-            `)}
-          </div>
-        </div>
-      ` : ''}
+            </div>
+          `
+        : ''}
     `
   }
 }
