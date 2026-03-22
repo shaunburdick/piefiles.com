@@ -5,7 +5,11 @@
 
 import { GAMES_QUERY, GAME_QUERY, MODS_QUERY, MOD_QUERY } from './queries.js'
 
-const API_ENDPOINT = 'https://www.gamefront.com/api/v1/graphql'
+// Use proxy in development to avoid CORS issues
+const API_ENDPOINT = import.meta.env.DEV 
+  ? '/api/v1/graphql'  // Proxied through Vite dev server
+  : 'https://www.gamefront.com/api/v1/graphql'  // Direct in production
+
 const USER_AGENT = 'PieFiles/1.0 (+https://piefiles.com)'
 const RATE_LIMIT_PER_MINUTE = 120
 const REQUEST_INTERVAL = 60000 / RATE_LIMIT_PER_MINUTE // ~500ms between requests
