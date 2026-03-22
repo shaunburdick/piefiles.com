@@ -1,5 +1,65 @@
-/* Retro theme colors - Phase 1 placeholder */
+/**
+ * Retro PieFiles Theme Colors
+ * Based on original 2005 PieFiles.com design
+ */
+
 :root {
-  --color-primary-text: #543F20;
-  --color-background: #A99E60;
+  /* Primary Colors */
+  --color-primary-text: #543F20;          /* Dark brown text */
+  --color-background: #A99E60;             /* Tan/beige background */
+  --color-accent-brown: #C89D5F;           /* Medium brown */
+  --color-accent-brown-alt: #AD915F;       /* Alternate brown */
+  --color-content-bg: #D0AA68;             /* Light tan content areas */
+  --color-content-bg-alt: #B4A57E;         /* Alternate content background */
+  --color-header-bg: #C89D5F;              /* Brown header bars */
+  
+  /* Text Colors */
+  --color-link: #543F20;                   /* Link color */
+  --color-link-hover: #FFFFFF;             /* Link hover color */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+  
+  /* UI Elements */
+  --color-border: #000000;                 /* Black borders */
+  --color-scrollbar-track: #C2B091;        /* Scrollbar track */
+  --color-scrollbar-thumb: #C89D5F;        /* Scrollbar thumb */
+  
+  /* Typography */
+  --font-family: Arial, sans-serif;
+  --font-size-base: 12px;
+  --font-size-small: 11px;
+  --font-size-large: 14px;
+  --font-size-h1: 24px;
+  --font-size-h2: 18px;
+  --font-size-h3: 14px;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 40px;
+  
+  /* Layout */
+  --max-width: 1200px;
+  --border-width: 1px;
+  --border-radius: 0px;  /* Retro style - no rounded corners */
+}
+
+/* Scrollbar styling for retro look (Chromium browsers) */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border: 1px solid var(--color-black);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-brown);
 }

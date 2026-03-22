@@ -1,1 +1,166 @@
-/* Responsive layout - Phase 1 placeholder */
+/**
+ * Responsive Layout Styles
+ * Mobile-first approach with breakpoints for tablet and desktop
+ */
+
+/* Mobile (<768px) - default styles */
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+
+.game-card,
+.mod-card {
+  background-color: var(--color-content-bg);
+  border: var(--border-width) solid var(--color-border);
+  padding: var(--spacing-md);
+  transition: background-color 0.2s;
+}
+
+.game-card:hover,
+.mod-card:hover {
+  background-color: var(--color-content-bg-alt);
+}
+
+/* Header responsive */
+.header {
+  background-color: var(--color-header-bg);
+  border-bottom: var(--border-width) solid var(--color-border);
+  padding: var(--spacing-md);
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.search-bar {
+  width: 100%;
+}
+
+/* Footer responsive */
+.footer {
+  background-color: var(--color-accent-brown);
+  border-top: var(--border-width) solid var(--color-border);
+  padding: var(--spacing-md);
+  margin-top: auto;
+  text-align: center;
+}
+
+/* Tablet (768px - 1024px) */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+  }
+  
+  .header-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .search-bar {
+    width: auto;
+    min-width: 300px;
+  }
+  
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+/* Desktop (>1024px) */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+  
+  .search-bar {
+    min-width: 400px;
+  }
+  
+  /* Two-column layout for game detail */
+  .game-detail-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-xl);
+  }
+  
+  /* Mod detail layout */
+  .mod-detail-layout {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: var(--spacing-xl);
+  }
+}
+
+/* Pagination controls */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  min-width: 80px;
+}
+
+/* Modal responsive */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: var(--spacing-md);
+}
+
+.modal {
+  background-color: var(--color-content-bg);
+  border: 2px solid var(--color-border);
+  padding: var(--spacing-lg);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .modal {
+    padding: var(--spacing-xl);
+  }
+}
+
+/* Touch-friendly tap targets on mobile */
+@media (max-width: 767px) {
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
