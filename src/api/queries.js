@@ -1,5 +1,6 @@
 /**
  * GraphQL query strings for GameFront API
+ *
  * @module queries
  */
 
@@ -27,7 +28,7 @@ export const GAMES_QUERY = `
       }
     }
   }
-`
+`;
 
 export const GAME_QUERY = `
   query Game($slug: String!) {
@@ -45,7 +46,7 @@ export const GAME_QUERY = `
       }
     }
   }
-`
+`;
 
 export const MODS_QUERY = `
   query ModsForGame($slug: String!, $first: Int!, $page: Int!) {
@@ -70,7 +71,7 @@ export const MODS_QUERY = `
       }
     }
   }
-`
+`;
 
 export const MOD_QUERY = `
   query Mod($slug: String!, $gameSlug: String!) {
@@ -100,4 +101,4 @@ export const MOD_QUERY = `
       }
     }
   }
-`
+`;

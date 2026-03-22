@@ -1,8 +1,8 @@
-import { LitElement, html, css } from 'lit'
-import { GAMEFRONT_API_KEY_URL } from '../config.js'
+import { LitElement, html, css } from 'lit';
+import { GAMEFRONT_API_KEY_URL } from '../config.js';
 
 export class PieApiKeyModal extends LitElement {
-  static styles = css`
+    static styles = css`
     :host {
       display: block;
     }
@@ -125,84 +125,86 @@ export class PieApiKeyModal extends LitElement {
       font-size: 11px;
       color: var(--color-primary-text, #543f20);
     }
-  `
+  `;
 
-  static properties = {
-    open: { type: Boolean },
-    apiKey: { type: String },
-    error: { type: String },
-    success: { type: Boolean },
-    testing: { type: Boolean },
-  }
+    static properties = {
+        open: { type: Boolean },
+        apiKey: { type: String },
+        error: { type: String },
+        success: { type: Boolean },
+        testing: { type: Boolean },
+    };
 
-  constructor() {
-    super()
-    this.open = false
-    this.apiKey = ''
-    this.error = ''
-    this.success = false
-    this.testing = false
-  }
-
-  handleInput(e) {
-    this.apiKey = e.target.value
-    this.error = ''
-    this.success = false
-  }
-
-  async handleSubmit(e) {
-    e.preventDefault()
-
-    if (!this.apiKey.trim()) {
-      this.error = 'Please enter an API key'
-      return
+    constructor() {
+        super();
+        this.open = false;
+        this.apiKey = '';
+        this.error = '';
+        this.success = false;
+        this.testing = false;
     }
 
-    this.testing = true
-    this.error = ''
-
-    try {
-      // Dispatch event for parent to test the key
-      const result = await this.dispatchEvent(
-        new CustomEvent('test-api-key', {
-          detail: { apiKey: this.apiKey.trim() },
-          bubbles: true,
-          composed: true,
-          cancelable: true,
-        })
-      )
-
-      if (result) {
-        this.success = true
-        this.error = ''
-
-        // Close modal after 1 second
-        setTimeout(() => {
-          this.open = false
-          this.success = false
-        }, 1000)
-      }
-    } catch (err) {
-      this.error = err.message || 'Failed to validate API key. Please try again.'
-    } finally {
-      this.testing = false
+    handleInput(e) {
+        this.apiKey = e.target.value;
+        this.error = '';
+        this.success = false;
     }
-  }
 
-  handleClose() {
+    async handleSubmit(e) {
+        e.preventDefault();
+
+        if (!this.apiKey.trim()) {
+            this.error = 'Please enter an API key';
+            return;
+        }
+
+        this.testing = true;
+        this.error = '';
+
+        try {
+            // Dispatch event for parent to test the key
+            const result = await this.dispatchEvent(
+                new CustomEvent('test-api-key', {
+                    detail: { apiKey: this.apiKey.trim() },
+                    bubbles: true,
+                    composed: true,
+                    cancelable: true,
+                })
+            );
+
+            if (result) {
+                this.success = true;
+                this.error = '';
+
+                // Close modal after 1 second
+                setTimeout(() => {
+                    this.open = false;
+                    this.success = false;
+                }, 1000);
+            }
+        } catch (err) {
+            this.error = err.message || 'Failed to validate API key. Please try again.';
+        } finally {
+            this.testing = false;
+        }
+    }
+
+    handleClose() {
     // Only allow closing if we have a valid key
-    this.dispatchEvent(
-      new CustomEvent('close', {
-        bubbles: true,
-        composed: true,
-      })
-    )
-  }
+        this.dispatchEvent(
+            new CustomEvent('close', {
+                bubbles: true,
+                composed: true,
+            })
+        );
+    }
 
-  render() {
-    if (!this.open) return html``
+    render() {
+        if (!this.open) {
+            return html``;
+        }
 
-    return html`
+        return html`
       <div class="modal-overlay">
         <div class="modal">
           <h2>🥧 Welcome to Pie Files!</h2>
@@ -232,8 +234,8 @@ export class PieApiKeyModal extends LitElement {
 
           ${this.error ? html` <div class="error-message">${this.error}</div> ` : ''}
           ${this.success
-            ? html` <div class="success-message">✓ API key validated successfully!</div> `
-            : ''}
+                ? html` <div class="success-message">✓ API key validated successfully!</div> `
+                : ''}
 
           <form @submit=${this.handleSubmit}>
             <div class="form-group">
@@ -256,8 +258,8 @@ export class PieApiKeyModal extends LitElement {
           </form>
         </div>
       </div>
-    `
-  }
+    `;
+    }
 }
 
-customElements.define('pie-api-key-modal', PieApiKeyModal)
+customElements.define('pie-api-key-modal', PieApiKeyModal);

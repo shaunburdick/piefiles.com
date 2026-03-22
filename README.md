@@ -78,7 +78,7 @@ npm run dev          # Start dev server with hot reload
 npm run build        # Build for production (outputs to dist/)
 npm run preview      # Preview production build
 npm run lint         # Run ESLint (must pass!)
-npm run format       # Format code with Prettier
+npm run lint:fix     # Auto-fix linting issues
 ```
 
 ### Project Structure

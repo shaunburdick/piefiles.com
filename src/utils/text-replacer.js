@@ -1,6 +1,7 @@
 /**
  * Text Replacer Utility
  * Replaces "file" with "pie" throughout text nodes, preserving case
+ *
  * @module text-replacer
  */
 
@@ -12,22 +13,22 @@
  * @returns {string} Text with replacements applied
  */
 export function replaceFileWithPie(text) {
-  // Match "file" or "files" with word boundaries, case-insensitive
-  return text.replace(/\b(f|F)(ile|ILE)(s|S)?\b/g, (match, f, ile, s) => {
+    // Match "file" or "files" with word boundaries, case-insensitive
+    return text.replace(/\b(f|F)(ile|ILE)(s|S)?\b/g, (match, f, ile, s) => {
     // Determine case of each part
-    const isUpperF = f === 'F'
-    const isUpperILE = ile === 'ILE'
-    const isUpperS = s === 'S'
+        const isUpperF = f === 'F';
+        const isUpperILE = ile === 'ILE';
+        const isUpperS = s === 'S';
 
-    // Build replacement
-    let result = isUpperF ? 'P' : 'p'
-    result += isUpperILE ? 'IE' : 'ie'
-    if (s) {
-      result += isUpperS ? 'S' : 's'
-    }
+        // Build replacement
+        let result = isUpperF ? 'P' : 'p';
+        result += isUpperILE ? 'IE' : 'ie';
+        if (s) {
+            result += isUpperS ? 'S' : 's';
+        }
 
-    return result
-  })
+        return result;
+    });
 }
 
 /**
@@ -37,37 +38,39 @@ export function replaceFileWithPie(text) {
  * @param {HTMLElement} element - Root element to process
  */
 export function replaceTextInElement(element) {
-  if (!element) return
-
-  // Use TreeWalker to efficiently traverse text nodes only
-  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
-    acceptNode: (node) => {
-      // Skip script and style tags
-      const parent = node.parentElement
-      if (parent && (parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE')) {
-        return NodeFilter.FILTER_REJECT
-      }
-      // Only process nodes with text content
-      return node.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
-    },
-  })
-
-  const nodesToReplace = []
-  let node
-
-  // Collect all text nodes first (don't modify during traversal)
-  while ((node = walker.nextNode())) {
-    nodesToReplace.push(node)
-  }
-
-  // Now replace text in collected nodes
-  nodesToReplace.forEach((textNode) => {
-    const original = textNode.textContent
-    const replaced = replaceFileWithPie(original)
-    if (replaced !== original) {
-      textNode.textContent = replaced
+    if (!element) {
+        return;
     }
-  })
+
+    // Use TreeWalker to efficiently traverse text nodes only
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+        acceptNode: (node) => {
+            // Skip script and style tags
+            const parent = node.parentElement;
+            if (parent && (parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE')) {
+                return NodeFilter.FILTER_REJECT;
+            }
+            // Only process nodes with text content
+            return node.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        },
+    });
+
+    const nodesToReplace = [];
+    let node;
+
+    // Collect all text nodes first (don't modify during traversal)
+    while ((node = walker.nextNode())) {
+        nodesToReplace.push(node);
+    }
+
+    // Now replace text in collected nodes
+    for (const textNode of nodesToReplace) {
+        const original = textNode.textContent;
+        const replaced = replaceFileWithPie(original);
+        if (replaced !== original) {
+            textNode.textContent = replaced;
+        }
+    }
 }
 
 /**
@@ -78,31 +81,31 @@ export function replaceTextInElement(element) {
  * @returns {MutationObserver} Observer instance (call .disconnect() to stop)
  */
 export function observeAndReplace(element) {
-  // Initial replacement
-  replaceTextInElement(element)
+    // Initial replacement
+    replaceTextInElement(element);
 
-  // Watch for future DOM changes
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.type === 'childList') {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            replaceTextInElement(node)
-          } else if (node.nodeType === Node.TEXT_NODE) {
-            node.textContent = replaceFileWithPie(node.textContent)
-          }
-        })
-      } else if (mutation.type === 'characterData') {
-        mutation.target.textContent = replaceFileWithPie(mutation.target.textContent)
-      }
-    })
-  })
+    // Watch for future DOM changes
+    const observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            if (mutation.type === 'childList') {
+                for (const node of mutation.addedNodes) {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        replaceTextInElement(node);
+                    } else if (node.nodeType === Node.TEXT_NODE) {
+                        node.textContent = replaceFileWithPie(node.textContent);
+                    }
+                }
+            } else if (mutation.type === 'characterData') {
+                mutation.target.textContent = replaceFileWithPie(mutation.target.textContent);
+            }
+        }
+    });
 
-  observer.observe(element, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-  })
+    observer.observe(element, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+    });
 
-  return observer
+    return observer;
 }

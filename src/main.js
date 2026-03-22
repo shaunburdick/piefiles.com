@@ -3,12 +3,10 @@
  * A humorous parody of GameFront.com with retro PieFiles theme
  */
 
-import './components/pie-app.js'
+import './components/pie-app.js';
 
 // Initialize the app
-const app = document.getElementById('app')
+const app = document.getElementById('app');
 if (app) {
-  app.innerHTML = '<pie-app></pie-app>'
+    app.innerHTML = '<pie-app></pie-app>';
 }
-
-console.log('🥧 PieFiles.com initialized')

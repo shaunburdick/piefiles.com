@@ -56,8 +56,7 @@ PieFiles.com is a humorous parody frontend that displays GameFront.com gaming co
 
 - **vite@8.0.1** - Build tool and dev server
 - **eslint@9.0.0** - Code linting
-- **prettier@3.0.0** - Code formatting
-- **@eslint/js@9.39.4** - ESLint configuration
+- **eslint-config-shaunburdick@6.0.3** - Shaun's style guide (4-space indent, single quotes, semicolons)
 - **globals@17.4.0** - Global variable definitions for ESLint
 - **terser@5.46.1** - JavaScript minification
 
@@ -120,8 +119,7 @@ piefiles.com/
 │   └── main.js                     # App entry point
 ├── index.html                      # Main HTML file with CSP meta tag
 ├── vite.config.js                  # Vite configuration (port 5174, CORS proxy)
-├── eslint.config.js                # ESLint 9.x flat config
-├── .prettierrc                     # Prettier configuration
+├── eslint.config.js                # ESLint 9.x flat config (shaunburdick style)
 ├── package.json                    # Dependencies & scripts
 ├── README.md                       # User-facing documentation
 ├── DEPLOYMENT.md                   # Deployment guide
@@ -141,8 +139,7 @@ npm run dev           # Start dev server at http://localhost:5174
 npm run build         # Build for production (output to dist/)
 npm run preview       # Preview production build
 npm run lint          # Run ESLint (must pass with zero errors)
-npm run format        # Format code with Prettier
-npm run format:check  # Check formatting without changing files
+npm run lint:fix      # Auto-fix linting issues (indentation, quotes, semicolons)
 ```
 
 ### Testing Protocol
@@ -358,7 +355,7 @@ git push -u origin fix/brief-description
 3. Use in `src/api/gamefront-client.js`:
    ```javascript
    async function fetchData(variables) {
-     return await apiClient.query(YOUR_QUERY, variables)
+     return await apiClient.query(YOUR_QUERY, variables);
    }
    ```
 4. Handle loading states and errors
@@ -492,10 +489,10 @@ ${unsafeHTML(sanitizeHTML(externalHTML))}
 **Always validate image URLs from external sources**:
 
 ```javascript
-import { getSafeImageURL } from '../utils/image-validator.js'
+import { getSafeImageURL } from "../utils/image-validator.js";
 
 // In render method:
-;<img src="${getSafeImageURL(game.box_art)}" alt="${game.title}" />
+<img src="${getSafeImageURL(game.box_art)}" alt="${game.title}" />;
 ```
 
 ### API Key Storage

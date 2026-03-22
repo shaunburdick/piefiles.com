@@ -1,7 +1,7 @@
-import { LitElement, html, css } from 'lit'
+import { LitElement, html, css } from 'lit';
 
 export class PieSpinner extends LitElement {
-  static styles = css`
+    static styles = css`
     :host {
       display: inline-block;
     }
@@ -33,25 +33,25 @@ export class PieSpinner extends LitElement {
       font-family: Arial, sans-serif;
       font-size: 14px;
     }
-  `
+  `;
 
-  static properties = {
-    message: { type: String },
-  }
+    static properties = {
+        message: { type: String },
+    };
 
-  constructor() {
-    super()
-    this.message = 'Loading...'
-  }
+    constructor() {
+        super();
+        this.message = 'Loading...';
+    }
 
-  render() {
-    return html`
+    render() {
+        return html`
       <div class="container">
         <div class="spinner"></div>
         ${this.message ? html`<div class="message">${this.message}</div>` : ''}
       </div>
-    `
-  }
+    `;
+    }
 }
 
-customElements.define('pie-spinner', PieSpinner)
+customElements.define('pie-spinner', PieSpinner);

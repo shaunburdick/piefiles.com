@@ -1,9 +1,9 @@
-import { LitElement, html, css } from 'lit'
-import { APP_NAME, APP_TAGLINE } from '../config.js'
-import { PIE_FLAVORS, applyFlavor, getCurrentFlavor } from '../utils/pie-flavors.js'
+import { LitElement, html, css } from 'lit';
+import { APP_NAME, APP_TAGLINE } from '../config.js';
+import { PIE_FLAVORS, applyFlavor, getCurrentFlavor } from '../utils/pie-flavors.js';
 
 export class PieHeader extends LitElement {
-  static styles = css`
+    static styles = css`
     :host {
       display: block;
     }
@@ -156,69 +156,69 @@ export class PieHeader extends LitElement {
       font-weight: bold;
       box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
-  `
+  `;
 
-  static properties = {
-    searchQuery: { type: String },
-    currentFlavor: { type: String },
-  }
+    static properties = {
+        searchQuery: { type: String },
+        currentFlavor: { type: String },
+    };
 
-  constructor() {
-    super()
-    this.searchQuery = ''
-    this.searchTimeout = null
-    this.currentFlavor = getCurrentFlavor()
-  }
+    constructor() {
+        super();
+        this.searchQuery = '';
+        this.searchTimeout = null;
+        this.currentFlavor = getCurrentFlavor();
+    }
 
-  connectedCallback() {
-    super.connectedCallback()
-    // Apply the saved flavor on load
-    applyFlavor(this.currentFlavor)
-  }
+    connectedCallback() {
+        super.connectedCallback();
+        // Apply the saved flavor on load
+        applyFlavor(this.currentFlavor);
+    }
 
-  handleSearchInput(e) {
-    this.searchQuery = e.target.value
+    handleSearchInput(e) {
+        this.searchQuery = e.target.value;
 
-    // Debounce search (300ms)
-    clearTimeout(this.searchTimeout)
-    this.searchTimeout = setTimeout(() => {
-      this.dispatchSearch()
-    }, 300)
-  }
+        // Debounce search (300ms)
+        clearTimeout(this.searchTimeout);
+        this.searchTimeout = setTimeout(() => {
+            this.dispatchSearch();
+        }, 300);
+    }
 
-  handleSearchSubmit(e) {
-    e.preventDefault()
-    clearTimeout(this.searchTimeout)
-    this.dispatchSearch()
-  }
+    handleSearchSubmit(e) {
+        e.preventDefault();
+        clearTimeout(this.searchTimeout);
+        this.dispatchSearch();
+    }
 
-  dispatchSearch() {
-    this.dispatchEvent(
-      new CustomEvent('search', {
-        detail: { query: this.searchQuery },
-        bubbles: true,
-        composed: true,
-      })
-    )
-  }
+    dispatchSearch() {
+        this.dispatchEvent(
+            new CustomEvent('search', {
+                detail: { query: this.searchQuery },
+                bubbles: true,
+                composed: true,
+            })
+        );
+    }
 
-  handleLogoClick(e) {
-    e.preventDefault()
-    this.dispatchEvent(
-      new CustomEvent('navigate-home', {
-        bubbles: true,
-        composed: true,
-      })
-    )
-  }
+    handleLogoClick(e) {
+        e.preventDefault();
+        this.dispatchEvent(
+            new CustomEvent('navigate-home', {
+                bubbles: true,
+                composed: true,
+            })
+        );
+    }
 
-  handleFlavorChange(flavorId) {
-    this.currentFlavor = flavorId
-    applyFlavor(flavorId)
-  }
+    handleFlavorChange(flavorId) {
+        this.currentFlavor = flavorId;
+        applyFlavor(flavorId);
+    }
 
-  render() {
-    return html`
+    render() {
+        return html`
       <header class="header">
         <div class="header-content">
           <div class="logo">
@@ -243,7 +243,7 @@ export class PieHeader extends LitElement {
         <div class="flavor-switcher">
           <span class="flavor-label">Pie Flavor:</span>
           ${Object.entries(PIE_FLAVORS).map(
-            ([id, flavor]) => html`
+                ([id, flavor]) => html`
               <button
                 type="button"
                 class="flavor-button ${this.currentFlavor === id ? 'active' : ''}"
@@ -252,11 +252,11 @@ export class PieHeader extends LitElement {
                 ${flavor.name}
               </button>
             `
-          )}
+            )}
         </div>
       </header>
-    `
-  }
+    `;
+    }
 }
 
-customElements.define('pie-header', PieHeader)
+customElements.define('pie-header', PieHeader);

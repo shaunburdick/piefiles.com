@@ -13,15 +13,15 @@
  * All URLs must use HTTPS protocol.
  */
 const ALLOWED_IMAGE_DOMAINS = [
-  'osiris.gamefront.com', // GameFront's image CDN
-  'www.gamefront.com', // GameFront main domain
-  'gamefront.com', // GameFront root domain
-]
+    'osiris.gamefront.com', // GameFront's image CDN
+    'www.gamefront.com', // GameFront main domain
+    'gamefront.com', // GameFront root domain
+];
 
 /**
  * Default placeholder image path (local to the site)
  */
-const PLACEHOLDER_IMAGE = '/placeholder.png'
+const PLACEHOLDER_IMAGE = '/placeholder.png';
 
 /**
  * Validates an image URL against the whitelist of allowed domains
@@ -35,27 +35,27 @@ const PLACEHOLDER_IMAGE = '/placeholder.png'
  * isValidImageURL('http://osiris.gamefront.com/image.jpg'); // false (not HTTPS)
  */
 export function isValidImageURL(url) {
-  if (!url || typeof url !== 'string') {
-    return false
-  }
-
-  try {
-    const parsedURL = new URL(url)
-
-    // Must use HTTPS protocol
-    if (parsedURL.protocol !== 'https:') {
-      return false
+    if (!url || typeof url !== 'string') {
+        return false;
     }
 
-    // Check if hostname is in the allowed list
-    const hostname = parsedURL.hostname.toLowerCase()
-    return ALLOWED_IMAGE_DOMAINS.some(
-      (domain) => hostname === domain || hostname.endsWith(`.${domain}`)
-    )
-  } catch {
+    try {
+        const parsedURL = new URL(url);
+
+        // Must use HTTPS protocol
+        if (parsedURL.protocol !== 'https:') {
+            return false;
+        }
+
+        // Check if hostname is in the allowed list
+        const hostname = parsedURL.hostname.toLowerCase();
+        return ALLOWED_IMAGE_DOMAINS.some(
+            (domain) => hostname === domain || hostname.endsWith(`.${domain}`)
+        );
+    } catch {
     // Invalid URL format
-    return false
-  }
+        return false;
+    }
 }
 
 /**
@@ -73,18 +73,18 @@ export function isValidImageURL(url) {
  * // Returns the URL if valid, or placeholder if not
  */
 export function getSafeImageURL(url, fallback = null) {
-  // Try primary URL first
-  if (isValidImageURL(url)) {
-    return url
-  }
+    // Try primary URL first
+    if (isValidImageURL(url)) {
+        return url;
+    }
 
-  // Try fallback URL if provided
-  if (fallback && isValidImageURL(fallback)) {
-    return fallback
-  }
+    // Try fallback URL if provided
+    if (fallback && isValidImageURL(fallback)) {
+        return fallback;
+    }
 
-  // Return placeholder for invalid URLs
-  return PLACEHOLDER_IMAGE
+    // Return placeholder for invalid URLs
+    return PLACEHOLDER_IMAGE;
 }
 
 /**
@@ -99,15 +99,15 @@ export function getSafeImageURL(url, fallback = null) {
  * const safeURL = getFirstValidImageURL([game.box_art, game.thumbnail, game.icon]);
  */
 export function getFirstValidImageURL(urls) {
-  if (!Array.isArray(urls)) {
-    return PLACEHOLDER_IMAGE
-  }
-
-  for (const url of urls) {
-    if (isValidImageURL(url)) {
-      return url
+    if (!Array.isArray(urls)) {
+        return PLACEHOLDER_IMAGE;
     }
-  }
 
-  return PLACEHOLDER_IMAGE
+    for (const url of urls) {
+        if (isValidImageURL(url)) {
+            return url;
+        }
+    }
+
+    return PLACEHOLDER_IMAGE;
 }
