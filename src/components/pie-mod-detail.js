@@ -272,14 +272,9 @@ export class PieModDetail extends LitElement {
 
         <div class="mod-meta">
           ${this.mod.author
-            ? html` <div><strong>Author:</strong> ${this.mod.author.name}</div> `
+            ? html` <div><strong>Author:</strong> ${this.mod.author.display_name}</div> `
             : ''}
-          ${this.mod.file_size
-            ? html`
-                <div><strong>File Size:</strong> ${this.formatFileSize(this.mod.file_size)}</div>
-              `
-            : ''}
-          <div><strong>Downloads:</strong> ${this.mod.download_count || 0}</div>
+          <div><strong>Downloads:</strong> ${this.mod.downloads || 0}</div>
           ${this.mod.created_at
             ? html` <div><strong>Uploaded:</strong> ${this.formatDate(this.mod.created_at)}</div> `
             : ''}
@@ -288,10 +283,10 @@ export class PieModDetail extends LitElement {
             : ''}
         </div>
 
-        ${this.mod.download_url
+        ${this.mod.url
           ? html`
               <a
-                href=${this.mod.download_url}
+                href=${this.mod.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="download-button"
@@ -310,19 +305,15 @@ export class PieModDetail extends LitElement {
             </div>
           `
         : ''}
-      ${this.mod.screenshots && this.mod.screenshots.length > 0
+      ${this.mod.images && this.mod.images.length > 0
         ? html`
             <div class="screenshots">
               <h2>Screenshots</h2>
               <div class="screenshots-grid">
-                ${this.mod.screenshots.map(
-                  (screenshot) => html`
+                ${this.mod.images.map(
+                  (image) => html`
                     <div class="screenshot">
-                      <img
-                        src=${screenshot.thumbnail_url || screenshot.url}
-                        alt="Screenshot"
-                        loading="lazy"
-                      />
+                      <img src=${image.path} alt="Screenshot" loading="lazy" />
                     </div>
                   `
                 )}

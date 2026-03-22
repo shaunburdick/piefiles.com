@@ -334,8 +334,7 @@ export class PieGameDetail extends LitElement {
                         ? html` <div class="description">${unsafeHTML(mod.description)}</div> `
                         : ''}
                       <div class="meta">
-                        ${mod.file_size ? `${this.formatFileSize(mod.file_size)} • ` : ''}
-                        ${mod.download_count} downloads
+                        ${mod.downloads || 0} downloads
                         ${mod.created_at ? ` • ${this.formatDate(mod.created_at)}` : ''}
                       </div>
                     </div>
