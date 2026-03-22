@@ -30,6 +30,7 @@ export class PieApp extends LitElement {
     currentView: { type: String },
     showApiKeyModal: { type: Boolean },
     loading: { type: Boolean },
+    searchQuery: { type: String },
   }
 
   constructor() {
@@ -37,6 +38,7 @@ export class PieApp extends LitElement {
     this.currentView = 'home'
     this.showApiKeyModal = false
     this.loading = false
+    this.searchQuery = ''
   }
 
   connectedCallback() {
@@ -67,6 +69,9 @@ export class PieApp extends LitElement {
 
   showHome() {
     this.currentView = 'home'
+    // Extract search query from URL
+    const params = new URLSearchParams(window.location.search)
+    this.searchQuery = params.get('search') || ''
   }
 
   showGame(slug) {
@@ -160,6 +165,7 @@ export class PieApp extends LitElement {
       case 'home':
         return html`
           <pie-games-list
+            .searchQuery=${this.searchQuery}
             @game-selected=${this.handleGameSelected}
             @open-api-key-modal=${this.handleOpenApiKeyModal}
           ></pie-games-list>

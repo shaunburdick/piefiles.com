@@ -8,68 +8,68 @@ export class PieGamesList extends LitElement {
     :host {
       display: block;
     }
-    
+
     .games-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 16px;
       margin-bottom: 24px;
     }
-    
+
     @media (min-width: 768px) {
       .games-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 24px;
       }
     }
-    
+
     @media (min-width: 1024px) {
       .games-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 32px;
       }
     }
-    
+
     .game-card {
-      background-color: var(--color-content-bg, #D0AA68);
+      background-color: var(--color-content-bg, #d0aa68);
       border: 1px solid var(--color-border, #000000);
       padding: 16px;
       transition: background-color 0.2s;
       cursor: pointer;
     }
-    
+
     .game-card:hover {
-      background-color: var(--color-content-bg-alt, #B4A57E);
+      background-color: var(--color-content-bg-alt, #b4a57e);
     }
-    
+
     .game-card h3 {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 14px;
       margin: 0 0 8px 0;
       font-weight: bold;
     }
-    
+
     .game-card .file-count {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 12px;
       margin-bottom: 8px;
     }
-    
+
     .game-card .categories {
       display: flex;
       flex-wrap: wrap;
       gap: 4px;
       margin-top: 8px;
     }
-    
+
     .category-tag {
-      background-color: var(--color-accent-brown, #C89D5F);
-      color: var(--color-white, #FFFFFF);
+      background-color: var(--color-accent-brown, #c89d5f);
+      color: var(--color-white, #ffffff);
       padding: 2px 8px;
       font-size: 10px;
       border: 1px solid var(--color-border, #000000);
     }
-    
+
     .pagination {
       display: flex;
       justify-content: center;
@@ -78,44 +78,44 @@ export class PieGamesList extends LitElement {
       padding: 24px 0;
       flex-wrap: wrap;
     }
-    
+
     .pagination button {
       padding: 8px 20px;
       font-size: 12px;
       font-family: Arial, sans-serif;
-      background-color: var(--color-accent-brown, #C89D5F);
-      color: var(--color-white, #FFFFFF);
-      border: 1px solid var(--color-white, #FFFFFF);
+      background-color: var(--color-accent-brown, #c89d5f);
+      color: var(--color-white, #ffffff);
+      border: 1px solid var(--color-white, #ffffff);
       cursor: pointer;
       min-width: 80px;
     }
-    
+
     .pagination button:hover:not(:disabled) {
-      background-color: var(--color-accent-brown-alt, #AD915F);
+      background-color: var(--color-accent-brown-alt, #ad915f);
     }
-    
+
     .pagination button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
-    
+
     .pagination .page-info {
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
       font-size: 12px;
     }
-    
+
     .error {
-      background-color: #FFE5E5;
-      color: #CC0000;
+      background-color: #ffe5e5;
+      color: #cc0000;
       padding: 16px;
-      border: 1px solid #CC0000;
+      border: 1px solid #cc0000;
       margin-bottom: 16px;
     }
-    
+
     .no-results {
       text-align: center;
       padding: 40px;
-      color: var(--color-primary-text, #543F20);
+      color: var(--color-primary-text, #543f20);
     }
   `
 
@@ -126,7 +126,7 @@ export class PieGamesList extends LitElement {
     currentPage: { type: Number },
     totalPages: { type: Number },
     hasMore: { type: Boolean },
-    searchQuery: { type: String }
+    searchQuery: { type: String },
   }
 
   constructor() {
@@ -142,12 +142,26 @@ export class PieGamesList extends LitElement {
 
   connectedCallback() {
     super.connectedCallback()
-    
-    // Get search query from URL
-    const params = new URLSearchParams(window.location.search)
-    this.searchQuery = params.get('search') || ''
-    
+
+    // If searchQuery wasn't passed as property, get it from URL
+    if (!this.searchQuery) {
+      const params = new URLSearchParams(window.location.search)
+      this.searchQuery = params.get('search') || ''
+    }
+
     this.loadGames()
+  }
+
+  /**
+   * Called when a reactive property changes
+   * Reload games when searchQuery changes
+   */
+  willUpdate(changedProperties) {
+    if (changedProperties.has('searchQuery') && this.hasUpdated) {
+      // Reset to page 1 when search query changes
+      this.currentPage = 1
+      this.loadGames()
+    }
   }
 
   async loadGames() {
@@ -160,7 +174,7 @@ export class PieGamesList extends LitElement {
         page: this.currentPage,
         perPage: 20,
         orderBy: 'FILE_COUNT',
-        orderDirection: 'DESC'
+        orderDirection: 'DESC',
       })
 
       this.games = result.data
@@ -176,18 +190,22 @@ export class PieGamesList extends LitElement {
   }
 
   handleGameClick(game) {
-    this.dispatchEvent(new CustomEvent('game-selected', {
-      detail: { slug: game.slug },
-      bubbles: true,
-      composed: true
-    }))
+    this.dispatchEvent(
+      new CustomEvent('game-selected', {
+        detail: { slug: game.slug },
+        bubbles: true,
+        composed: true,
+      })
+    )
   }
 
   handleConfigureApiKey() {
-    this.dispatchEvent(new CustomEvent('open-api-key-modal', {
-      bubbles: true,
-      composed: true
-    }))
+    this.dispatchEvent(
+      new CustomEvent('open-api-key-modal', {
+        bubbles: true,
+        composed: true,
+      })
+    )
   }
 
   async handlePrevPage() {
@@ -220,14 +238,15 @@ export class PieGamesList extends LitElement {
       const isAuthError = this.error.includes('API key') || this.error.includes('authentication')
       return html`
         <div class="error">
-          <strong>Error:</strong> ${this.error}
-          <br><br>
+          <strong>Error:</strong> ${this.error} <br /><br />
           <button @click=${this.loadGames}>Retry</button>
-          ${isAuthError ? html`
-            <button @click=${this.handleConfigureApiKey} style="margin-left: 8px;">
-              Configure API Key
-            </button>
-          ` : ''}
+          ${isAuthError
+            ? html`
+                <button @click=${this.handleConfigureApiKey} style="margin-left: 8px;">
+                  Configure API Key
+                </button>
+              `
+            : ''}
         </div>
       `
     }
@@ -237,7 +256,7 @@ export class PieGamesList extends LitElement {
         <div class="no-results">
           <h2>No Pies Found</h2>
           <p>
-            ${this.searchQuery 
+            ${this.searchQuery
               ? `No games matching "${this.searchQuery}" were found.`
               : 'No games available at this time.'}
           </p>
@@ -246,51 +265,47 @@ export class PieGamesList extends LitElement {
     }
 
     return html`
-      ${this.searchQuery ? html`
-        <div style="margin-bottom: 16px; color: var(--color-primary-text);">
-          <strong>Search results for:</strong> "${this.searchQuery}"
-        </div>
-      ` : ''}
-      
-      <div class="games-grid">
-        ${this.games.map(game => html`
-          <div class="game-card" @click=${() => this.handleGameClick(game)}>
-            <h3>${game.title}</h3>
-            <div class="file-count">
-              ${game.file_count} files available
+      ${this.searchQuery
+        ? html`
+            <div style="margin-bottom: 16px; color: var(--color-primary-text);">
+              <strong>Search results for:</strong> "${this.searchQuery}"
             </div>
-            ${game.categories && game.categories.length > 0 ? html`
-              <div class="categories">
-                ${game.categories.map(cat => html`
-                  <span class="category-tag">${cat.name}</span>
-                `)}
-              </div>
-            ` : ''}
-          </div>
-        `)}
+          `
+        : ''}
+
+      <div class="games-grid">
+        ${this.games.map(
+          (game) => html`
+            <div class="game-card" @click=${() => this.handleGameClick(game)}>
+              <h3>${game.title}</h3>
+              <div class="file-count">${game.file_count} files available</div>
+              ${game.categories && game.categories.length > 0
+                ? html`
+                    <div class="categories">
+                      ${game.categories.map(
+                        (cat) => html` <span class="category-tag">${cat.name}</span> `
+                      )}
+                    </div>
+                  `
+                : ''}
+            </div>
+          `
+        )}
       </div>
 
-      ${this.totalPages > 1 ? html`
-        <div class="pagination">
-          <button 
-            @click=${this.handlePrevPage} 
-            ?disabled=${this.currentPage === 1}
-          >
-            ← Previous
-          </button>
-          
-          <span class="page-info">
-            Page ${this.currentPage} of ${this.totalPages}
-          </span>
-          
-          <button 
-            @click=${this.handleNextPage} 
-            ?disabled=${!this.hasMore}
-          >
-            Next →
-          </button>
-        </div>
-      ` : ''}
+      ${this.totalPages > 1
+        ? html`
+            <div class="pagination">
+              <button @click=${this.handlePrevPage} ?disabled=${this.currentPage === 1}>
+                ← Previous
+              </button>
+
+              <span class="page-info"> Page ${this.currentPage} of ${this.totalPages} </span>
+
+              <button @click=${this.handleNextPage} ?disabled=${!this.hasMore}>Next →</button>
+            </div>
+          `
+        : ''}
     `
   }
 }
