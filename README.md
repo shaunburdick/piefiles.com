@@ -2,7 +2,10 @@
 
 > **The Ultimate Sweet Baked Pastry Download Resource!** 🥧
 
+**🌐 Live Site**: [https://piefiles.com](https://piefiles.com)
+
 A humorous parody/joke frontend that displays [GameFront.com](https://www.gamefront.com) content with:
+
 - Retro 2005 PieFiles.com color scheme (brown/tan aesthetic)
 - All instances of "file" replaced with "pie" throughout the site
 - Modern responsive design
@@ -10,27 +13,28 @@ A humorous parody/joke frontend that displays [GameFront.com](https://www.gamefr
 
 ## ⚠️ Disclaimer
 
-This is a parody/joke site. All gaming content is provided by GameFront.com via their public API. This is not affiliated with or endorsed by GameFront. 
+This is a parody/joke site. All gaming content is provided by GameFront.com via their public API. This is not affiliated with or endorsed by GameFront.
 
 Original PieFiles.com was an Age of Mythology files site from 2005. This project pays homage to that retro aesthetic while having fun with word replacement.
 
 ## 🎯 Project Status
 
-**Current Phase**: Implementation Complete - Ready for Testing! 🎉
+**Current Phase**: ✅ Deployed and Live!
 
 - ✅ Constitution created (.specify/memory/constitution.md)
 - ✅ Feature specification complete (.specify/features/001-gamefront-retro-theme.md)
 - ✅ Implementation planning complete (specs/001-gamefront-retro-theme/)
 - ✅ All components implemented (Phase 1-4)
-- ✅ CORS proxy configured for development
-- ✅ Error handling and loading states
-- ⏳ **Next**: Testing and deployment to GitHub Pages
+- ✅ Testing complete (Phase 5)
+- ✅ **Deployed to GitHub Pages** (Phase 6)
+- 🌐 **Live at**: [https://piefiles.com](https://piefiles.com)
 
 ## 📋 Specification Overview
 
 See [.specify/features/001-gamefront-retro-theme.md](.specify/features/001-gamefront-retro-theme.md) for complete details.
 
 **Key Features**:
+
 - Browse games and mods from GameFront with retro styling
 - Search functionality (powered by GameFront API)
 - Responsive design (mobile, tablet, desktop)
@@ -39,6 +43,7 @@ See [.specify/features/001-gamefront-retro-theme.md](.specify/features/001-gamef
 - No backend required (pure frontend)
 
 **Tech Constraints**:
+
 - Frontend-only (no backend/server)
 - Hosted on GitHub Pages
 - Calls GameFront API directly from browser
@@ -48,6 +53,7 @@ See [.specify/features/001-gamefront-retro-theme.md](.specify/features/001-gamef
 ## 🎨 Retro Theme Colors
 
 From the original 2005 PieFiles.com:
+
 - Primary Text: `#543F20` (dark brown)
 - Background: `#A99E60` (tan/beige)
 - Accent: `#C89D5F`, `#AD915F` (medium browns)
@@ -56,6 +62,7 @@ From the original 2005 PieFiles.com:
 ## 🚀 Development Approach
 
 This project follows **Specification-Driven Development (SDD)**:
+
 1. ✅ **Constitution** - Core principles and technical decisions
 2. ✅ **Specification** - Complete feature requirements
 3. ⏳ **Planning** - Technical architecture and implementation plan
@@ -85,7 +92,8 @@ This project follows **Specification-Driven Development (SDD)**:
 ## 🛠️ Local Development
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm 9+
 
 ### Setup
@@ -148,6 +156,7 @@ src/
 ### CORS Handling
 
 Development uses a Vite proxy to avoid CORS issues:
+
 - **Dev**: `/api/v1/graphql` (proxied through Vite)
 - **Production**: `https://www.gamefront.com/api/v1/graphql` (direct)
 
