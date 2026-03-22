@@ -7,12 +7,12 @@ export class Router {
   constructor() {
     this.routes = []
     this.currentRoute = null
-    
+
     // Handle browser back/forward
     window.addEventListener('popstate', () => {
       this.handleRoute(window.location.pathname)
     })
-    
+
     // Handle initial route from 404.html redirect
     const params = new URLSearchParams(window.location.search)
     const route = params.get('route')
@@ -20,7 +20,7 @@ export class Router {
       this.navigate(route, { replace: true })
     }
   }
-  
+
   /**
    * Register a route
    * @param {string} path - Route path (e.g., "/games/:slug")
@@ -32,15 +32,15 @@ export class Router {
       paramNames.push(paramName)
       return '([^/]+)'
     })
-    
+
     this.routes.push({
       path,
       regex: new RegExp(`^${regexPath}$`),
       paramNames,
-      handler
+      handler,
     })
   }
-  
+
   /**
    * Navigate to a new route
    * @param {string} path - Path to navigate to
@@ -55,43 +55,46 @@ export class Router {
     }
     this.handleRoute(path)
   }
-  
+
   /**
    * Handle route change
    * @param {string} path - Current path
    */
   handleRoute(path) {
+    // Extract pathname only (ignore query string and hash)
+    const pathname = path.split('?')[0].split('#')[0]
+
     for (const route of this.routes) {
-      const match = path.match(route.regex)
+      const match = pathname.match(route.regex)
       if (match) {
         const params = {}
         route.paramNames.forEach((name, index) => {
           params[name] = match[index + 1]
         })
-        
+
         this.currentRoute = { path: route.path, params }
         route.handler(params)
         return
       }
     }
-    
+
     // No route matched - 404
     this.handle404()
   }
-  
+
   /**
    * Handle 404 - route not found
    */
   handle404() {
     this.currentRoute = null
-    const handler = this.routes.find(r => r.path === '/404')?.handler
+    const handler = this.routes.find((r) => r.path === '/404')?.handler
     if (handler) {
       handler()
     } else {
       console.error('No 404 handler registered')
     }
   }
-  
+
   /**
    * Start the router - handle initial route
    */
