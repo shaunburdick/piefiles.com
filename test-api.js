@@ -6,19 +6,52 @@
  */
 
 import { apiClient } from './src/api/gamefront-client.js'
+import { readFileSync } from 'fs'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 console.log('🧪 Testing GameFront API Integration\n')
 
+// Load API key from .env file
+function loadApiKey() {
+  try {
+    const envPath = join(__dirname, '.env')
+    const envContent = readFileSync(envPath, 'utf-8')
+    const match = envContent.match(/GAMEFRONT_API_KEY=(.+)/)
+    if (match && match[1] && match[1].trim() && match[1] !== 'your_api_key_here') {
+      return match[1].trim()
+    }
+  } catch (err) {
+    // .env file doesn't exist or can't be read
+  }
+  return null
+}
+
 async function runTests() {
-  // Check if API key is set
-  const apiKey = apiClient.getApiKey()
+  // Try to load API key from .env
+  let apiKey = loadApiKey()
+
   if (!apiKey) {
-    console.error('❌ No API key found in localStorage')
-    console.log('💡 Please open http://localhost:5174 and configure your API key first\n')
+    // Check if API key is set in localStorage (browser)
+    apiKey = apiClient.getApiKey()
+  }
+
+  if (!apiKey) {
+    console.error('❌ No API key found\n')
+    console.log('📝 To run tests, add your API key to .env file:')
+    console.log('   1. Open .env file in the project root')
+    console.log('   2. Replace the line with: GAMEFRONT_API_KEY=your_actual_key')
+    console.log('   3. Save and run this script again\n')
+    console.log('💡 The .env file is in .gitignore and will not be committed\n')
     process.exit(1)
   }
 
-  console.log('✅ API key found\n')
+  // Set the API key for testing
+  apiClient.setApiKey(apiKey)
+  console.log('✅ API key loaded\n')
 
   try {
     // Test 1: Get games list
