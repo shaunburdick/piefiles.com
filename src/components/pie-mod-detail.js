@@ -4,57 +4,44 @@ import { apiClient } from '../api/gamefront-client.js';
 import { replaceTextInElement } from '../utils/text-replacer.js';
 import { sanitizeHTML } from '../utils/sanitize.js';
 import { getSafeImageURL } from '../utils/image-validator.js';
+import { buttonStyles } from '../styles/shared-styles.js';
 import './pie-spinner.js';
 
 export class PieModDetail extends LitElement {
-    static styles = css`
-    :host {
-      display: block;
-    }
+    static styles = [
+        buttonStyles,
+        css`
+      :host {
+        display: block;
+      }
 
-    .back-button {
-      padding: 8px 16px;
-      font-size: 12px;
-      font-family: Arial, sans-serif;
-      background-color: var(--color-accent-brown, #c89d5f);
-      color: var(--color-white, #ffffff);
-      border: 1px solid var(--color-white, #ffffff);
-      cursor: pointer;
-      margin-bottom: 24px;
-      display: inline-block;
-    }
+      .mod-header {
+        background-color: var(--color-content-bg, #d0aa68);
+        border: 1px solid var(--color-border, #000000);
+        padding: 24px;
+        margin-bottom: 24px;
+      }
 
-    .back-button:hover {
-      background-color: var(--color-accent-brown-alt, #ad915f);
-    }
+      .mod-header h1 {
+        color: var(--color-primary-text, #543f20);
+        font-size: 24px;
+        margin: 0 0 16px 0;
+      }
 
-    .mod-header {
-      background-color: var(--color-content-bg, #d0aa68);
-      border: 1px solid var(--color-border, #000000);
-      padding: 24px;
-      margin-bottom: 24px;
-    }
+      .mod-meta {
+        color: var(--color-primary-text, #543f20);
+        font-size: 12px;
+        margin-bottom: 16px;
+        line-height: 1.8;
+      }
 
-    .mod-header h1 {
-      color: var(--color-primary-text, #543f20);
-      font-size: 24px;
-      margin: 0 0 16px 0;
-    }
+      .mod-meta strong {
+        font-weight: bold;
+      }
 
-    .mod-meta {
-      color: var(--color-primary-text, #543f20);
-      font-size: 12px;
-      margin-bottom: 16px;
-      line-height: 1.8;
-    }
-
-    .mod-meta strong {
-      font-weight: bold;
-    }
-
-    .download-button {
-      padding: 12px 32px;
-      font-size: 14px;
+      .download-button {
+        padding: 12px 32px;
+        font-size: 14px;
       font-family: Arial, sans-serif;
       background-color: var(--color-accent-brown, #c89d5f);
       color: var(--color-white, #ffffff);
@@ -147,7 +134,8 @@ export class PieModDetail extends LitElement {
       border: 1px solid #cc0000;
       margin-bottom: 16px;
     }
-  `;
+    `,
+    ];
 
     static properties = {
         modSlug: { type: String },

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Brown background circle -->
+  <circle cx="50" cy="50" r="48" fill="#543f20" stroke="#000" stroke-width="2"/>
+  
+  <!-- Beige pie shape -->
+  <path d="M 50 50 L 50 20 A 30 30 0 0 1 73.66 66.34 Z" fill="#d0aa68" stroke="#000" stroke-width="1.5"/>
+  <path d="M 50 50 L 73.66 66.34 A 30 30 0 0 1 26.34 66.34 Z" fill="#b4a57e" stroke="#000" stroke-width="1.5"/>
+  <path d="M 50 50 L 26.34 66.34 A 30 30 0 0 1 50 20 Z" fill="#c89d5f" stroke="#000" stroke-width="1.5"/>
+  
+  <!-- Center circle for "pie top" -->
+  <circle cx="50" cy="50" r="6" fill="#f5f0e8" stroke="#000" stroke-width="1"/>
+</svg>
