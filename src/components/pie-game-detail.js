@@ -3,107 +3,94 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { apiClient } from '../api/gamefront-client.js';
 import { replaceTextInElement } from '../utils/text-replacer.js';
 import { sanitizeHTML } from '../utils/sanitize.js';
+import { buttonStyles } from '../styles/shared-styles.js';
 import './pie-spinner.js';
 
 export class PieGameDetail extends LitElement {
-    static styles = css`
-    :host {
-      display: block;
-    }
-
-    .game-header {
-      background-color: var(--color-content-bg, #d0aa68);
-      border: 1px solid var(--color-border, #000000);
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .game-header h1 {
-      color: var(--color-primary-text, #543f20);
-      font-size: 24px;
-      margin: 0 0 12px 0;
-    }
-
-    .game-meta {
-      color: var(--color-primary-text, #543f20);
-      font-size: 12px;
-      margin-bottom: 12px;
-    }
-
-    .categories {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 12px;
-    }
-
-    .category-tag {
-      background-color: var(--color-accent-brown, #c89d5f);
-      color: var(--color-white, #ffffff);
-      padding: 4px 12px;
-      font-size: 11px;
-      border: 1px solid var(--color-border, #000000);
-    }
-
-    .back-button {
-      padding: 8px 16px;
-      font-size: 12px;
-      font-family: Arial, sans-serif;
-      background-color: var(--color-accent-brown, #c89d5f);
-      color: var(--color-white, #ffffff);
-      border: 1px solid var(--color-white, #ffffff);
-      cursor: pointer;
-      margin-bottom: 24px;
-      display: inline-block;
-    }
-
-    .back-button:hover {
-      background-color: var(--color-accent-brown-alt, #ad915f);
-    }
-
-    .mods-section h2 {
-      color: var(--color-primary-text, #543f20);
-      font-size: 18px;
-      margin-bottom: 16px;
-    }
-
-    .mods-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    @media (min-width: 768px) {
-      .mods-grid {
-        grid-template-columns: repeat(2, 1fr);
+    static styles = [
+        buttonStyles,
+        css`
+      :host {
+        display: block;
       }
-    }
 
-    .mod-card {
-      background-color: var(--color-content-bg, #d0aa68);
-      border: 1px solid var(--color-border, #000000);
-      padding: 16px;
-      transition: background-color 0.2s;
-      cursor: pointer;
-    }
+      .game-header {
+        background-color: var(--color-content-bg, #d0aa68);
+        border: 1px solid var(--color-border, #000000);
+        padding: 24px;
+        margin-bottom: 24px;
+      }
 
-    .mod-card:hover {
-      background-color: var(--color-content-bg-alt, #b4a57e);
-    }
+      .game-header h1 {
+        color: var(--color-primary-text, #543f20);
+        font-size: 24px;
+        margin: 0 0 12px 0;
+      }
 
-    .mod-card h3 {
-      color: var(--color-primary-text, #543f20);
-      font-size: 14px;
-      margin: 0 0 8px 0;
-      font-weight: bold;
-    }
+      .game-meta {
+        color: var(--color-primary-text, #543f20);
+        font-size: 12px;
+        margin-bottom: 12px;
+      }
 
-    .mod-card .description {
-      color: var(--color-primary-text, #543f20);
-      font-size: 11px;
-      line-height: 1.5;
-      margin-bottom: 8px;
+      .categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 12px;
+      }
+
+      .category-tag {
+        background-color: var(--color-accent-brown, #c89d5f);
+        color: var(--color-white, #ffffff);
+        padding: 4px 12px;
+        font-size: 11px;
+        border: 1px solid var(--color-border, #000000);
+      }
+
+      .mods-section h2 {
+        color: var(--color-primary-text, #543f20);
+        font-size: 18px;
+        margin-bottom: 16px;
+      }
+
+      .mods-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      @media (min-width: 768px) {
+        .mods-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .mod-card {
+        background-color: var(--color-content-bg, #d0aa68);
+        border: 1px solid var(--color-border, #000000);
+        padding: 16px;
+        transition: background-color 0.2s;
+        cursor: pointer;
+      }
+
+      .mod-card:hover {
+        background-color: var(--color-content-bg-alt, #b4a57e);
+      }
+
+      .mod-card h3 {
+        color: var(--color-primary-text, #543f20);
+        font-size: 14px;
+        margin: 0 0 8px 0;
+        font-weight: bold;
+      }
+
+      .mod-card .description {
+        color: var(--color-primary-text, #543f20);
+        font-size: 11px;
+        line-height: 1.5;
+        margin-bottom: 8px;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
@@ -155,14 +142,15 @@ export class PieGameDetail extends LitElement {
       margin-bottom: 16px;
     }
 
-    .no-mods {
-      text-align: center;
-      padding: 40px;
-      color: var(--color-primary-text, #543f20);
-      background-color: var(--color-content-bg, #d0aa68);
-      border: 1px solid var(--color-border, #000000);
-    }
-  `;
+      .no-mods {
+        text-align: center;
+        padding: 40px;
+        color: var(--color-primary-text, #543f20);
+        background-color: var(--color-content-bg, #d0aa68);
+        border: 1px solid var(--color-border, #000000);
+      }
+    `,
+    ];
 
     static properties = {
         slug: { type: String },
