@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { router } from '../utils/router.js';
 import { apiClient } from '../api/gamefront-client.js';
+import { cardStyles, buttonStyles, utilityStyles } from '../styles/shared-styles.js';
 import './pie-header.js';
 import './pie-footer.js';
 import './pie-api-key-modal.js';
@@ -11,21 +12,26 @@ import './pie-game-detail.js';
 import './pie-mod-detail.js';
 
 export class PieApp extends LitElement {
-    static styles = css`
-    :host {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    static styles = [
+        cardStyles,
+        buttonStyles,
+        utilityStyles,
+        css`
+      :host {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
 
-    .main-content {
-      flex: 1;
-      max-width: 1200px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 24px 16px;
-    }
-  `;
+      .main-content {
+        flex: 1;
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 24px 16px;
+      }
+    `,
+    ];
 
     static properties = {
         currentView: { type: String },
@@ -164,6 +170,11 @@ export class PieApp extends LitElement {
         this.showApiKeyModal = true;
     }
 
+    handleNavigate(e) {
+        const { path } = e.detail;
+        router.navigate(path);
+    }
+
     renderView() {
         if (this.showApiKeyModal) {
             return html``;
@@ -252,6 +263,7 @@ export class PieApp extends LitElement {
 
       <pie-footer
         @clear-api-key-request=${this.handleClearApiKeyRequest}
+        @navigate=${this.handleNavigate}
       ></pie-footer>
 
       <pie-api-key-modal
