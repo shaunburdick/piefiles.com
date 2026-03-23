@@ -1,0 +1,12 @@
+# robots.txt for PieFiles.com
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://piefiles.com/sitemap.xml
+
+# Crawl-delay to be respectful to servers
+# (though this is a static site, so not critical)
+Crawl-delay: 1
